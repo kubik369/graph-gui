@@ -1,0 +1,331 @@
+package graphgui;
+
+import java.io.File;
+import java.io.PrintStream;
+import java.util.Scanner;
+import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.*;
+import javafx.event.*;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.layout.*;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+
+/**
+ * Hlavná trieda aplikácie - obsahuje dizajn a funkcionalitu ovládacích prvkov hlavného okna aplikácie.
+ *
+ * Obsahuje nasledovné ovládacie prvky
+ * - Label infoLabel: aktuálna pozícia myši (súradnice alebo vrchol, na ktorom je myš)
+ * - Label selectedLabel: informácie o vybranom vrchole
+ * - MyPanel gpanel: grafický panel
+ * - ListView listView: zoznam hrán incidentných s vybraným vrcholom
+ * - Button del: gombík na mazanie vybratého vrchola
+ * - Button edel: gombík na mazanie vybratej hrany
+ * - Button ebtn: gombík na úlohu A
+ * - Button abtn: gombík na úlohu B
+ * - Menu menu1: menu File s prvkami Open, Save a Exit
+ * - BorderPane rpanel, GridPane panel, BorderPane root: panely na uloženie ovládacích prvkov
+ */
+public class GraphGUI extends Application implements ExtendedGraph.GraphObserver {
+
+    private static final ObservableList<Edge> data = FXCollections.observableArrayList();
+
+    private final int BTNSIZE=100;
+    private final Label infoLabel=new Label("");
+
+    /**
+     * Nastavenie textu s informáciou o pozícii myši
+     */
+    public void setInfoLabelText(String s) {
+        infoLabel.setText(s);
+    }
+
+    private final Label selectedLabel=new Label("No selected vertex");
+    public void setSelectedLabelText(String s) {
+        selectedLabel.setText(s);
+    }
+
+    private final ExtendedGraph graph = new ExtendedGraph();
+    private final MyPanel gpanel=new MyPanel(this, graph);
+
+    private final ListView<Edge> listView = new ListView<Edge>(data);
+
+    private final Button del = new Button("Delete Vertex");
+    private final Button edel = new Button("Delete Edge");
+    private final Button ebtn = new Button("Edit");
+    private final Button abtn = new Button("Action");
+
+    private final BorderPane rpanel=new BorderPane();
+    private final GridPane panel=new GridPane();
+    private final BorderPane root = new BorderPane();
+
+    private final Menu menu1 = new Menu("File");
+
+    @Override public void start(Stage primaryStage) {
+
+        graph.addObserver(this);
+
+        MenuBar menuBar = new MenuBar();
+        menuBar.getMenus().add(menu1);
+        MenuItem menu11 = new MenuItem("Open");
+        menu11.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent event) {
+                try {
+                    openFile(ExamSpecifics.getInFileName());
+                } catch (java.io.IOException e) {
+                    System.err.println("Problem so suborom");
+                }
+            }
+        });
+        MenuItem menu12 = new MenuItem("Save");
+        menu12.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent event) {
+                try {
+                    saveFile(ExamSpecifics.getOutFileName());
+                } catch (java.io.IOException e) {
+                    System.err.println("Problem so suborom");
+                }
+            }
+        });
+        MenuItem menu13 = new MenuItem("Exit");
+        menu13.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent event) {
+                System.exit(0);
+            }
+        });
+        menu1.getItems().add(menu11);
+        menu1.getItems().add(menu12);
+        menu1.getItems().add(menu13);
+
+
+        listView.setEditable(false);
+        listView.setMaxWidth(BTNSIZE);
+        listView.setItems(data);
+        listView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Edge>() {
+            @Override public void changed(ObservableValue<? extends Edge> observable, Edge oldValue, Edge newValue) {
+		if(newValue != null) {
+		    graph.selectEdge(newValue);
+		} else {
+		    graph.deselectEdge();
+		}
+            }
+        });
+
+        panel.getColumnConstraints().add(new ColumnConstraints(BTNSIZE));
+        GridPane.setRowIndex(del,0);
+        GridPane.setColumnIndex(del,0);
+        del.setMinWidth(BTNSIZE);
+        GridPane.setRowIndex(edel,1);
+        GridPane.setColumnIndex(edel,0);
+        edel.setMinWidth(BTNSIZE);
+        GridPane.setRowIndex(ebtn,2);
+        GridPane.setColumnIndex(ebtn,0);
+        ebtn.setMinWidth(BTNSIZE);
+        GridPane.setRowIndex(abtn,3);
+        GridPane.setColumnIndex(abtn,0);
+        abtn.setMinWidth(BTNSIZE);
+
+
+        panel.getChildren().addAll(del,edel,ebtn,abtn);
+        rpanel.setCenter(listView);
+        rpanel.setTop(selectedLabel);
+        rpanel.setBottom(panel);
+
+        del.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent event) {
+                try {
+                    graph.removeSelectedVertex();
+                }
+                catch (Exception e) {
+                    System.err.println("Nedá sa vymazať vrchol!");
+                }
+            }
+        });
+
+        edel.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent event) {
+                try {
+                    graph.removeSelectedEdge();
+                }
+                catch (Exception e) {
+                    System.err.println("Nedá sa vymazať hrana!");
+                }
+            }
+        });
+
+        ebtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent event) {
+                try {
+                    ExamSpecifics.edit(graph);
+                } catch (Exception e) {
+                    System.err.println("Vo funkcii v Editor bola chyba: " + e.toString());
+                }
+            }
+        });
+
+        abtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent event) {
+                try {
+                    GraphAlgorithm ga = new GraphAlgorithm((Graph)graph,
+                                                           graph.getSelectedVertex(),
+                                                           graph.getSelectedEdge());
+                    String result = ga.performAlgorithm();
+                    if (result != null) {
+                        Alert alert = new Alert(AlertType.INFORMATION);
+                        alert.setTitle("Information Dialog");
+                        alert.setHeaderText(null);
+                        alert.setContentText(result);
+
+                        alert.showAndWait();
+                    }
+                } catch (Exception e) {
+                    System.err.println("Vo funkcii v GraphAlgorithm bola chyba: " + e.toString());
+                }
+            }
+        });
+
+        root.setBottom(infoLabel);
+        root.setTop(menuBar);
+        root.setCenter(gpanel);
+        root.setRight(rpanel);
+
+        Scene scene = new Scene(root);
+
+        primaryStage.setTitle("GraphGUI");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        launch(args);
+    }
+
+    @Override
+    public void vertexAdded(Vertex vertex) {
+    }
+
+    @Override
+    public void edgeAdded(Edge edge) {
+	if(edge.getOrigin()==graph.getSelectedVertex()) {
+	    data.add(edge);
+	}
+	else if(edge.getDestination()==graph.getSelectedVertex()) {
+	    data.add(edge.getReverse());
+	}
+    }
+
+    @Override
+    public void vertexRemoved(Vertex vertex) {
+    }
+
+    @Override
+    public void edgeRemoved(Edge edge) {
+        selectionUpdated();
+    }
+
+    @Override
+    public void edgeSelected(Edge edge) {
+	// ak by hranu zvolil iny mechanizmus, treba ju zvolit aj v listView
+	if(edge==null) {
+	    throw new IllegalArgumentException("null edge cannot be selected");
+	}
+	int toSelect = data.indexOf(edge);
+	if(toSelect<0) {
+	    toSelect = data.indexOf(edge.getReverse());
+	}
+	if(toSelect<0) {
+	    throw new IllegalArgumentException("edge cannot be selected");
+	}
+	if(!listView.getSelectionModel().isSelected(toSelect)) {
+	    listView.getSelectionModel().clearAndSelect(toSelect);
+	}
+    }
+
+    @Override
+    public void edgeDeselected(Edge edge) {
+	// ak by hranu odzvolil iny mechanizmus, treba ju odzvolit aj v listView
+	if(!listView.getSelectionModel().isEmpty()) {
+	    listView.getSelectionModel().clearSelection();
+	}
+    }
+
+    @Override
+    public void vertexSelected(Vertex vertex) {
+        selectionUpdated();
+    }
+    @Override
+    public void vertexDeselected(Vertex vertex) {
+        selectionUpdated();
+    }
+    @Override
+    public void edgeChanged(Edge edge) {
+        selectionUpdated();
+    }
+    @Override
+    public void vertexChanged(Vertex vertex) {
+        selectionUpdated();
+    }
+
+    /**
+     * Vykoná potrebné akcie po zmene vybranej hrany alebo vrchola
+     * alebo ich vlastností.
+     */
+    private void selectionUpdated() {
+        Vertex selected = graph.getSelectedVertex();
+	Edge selectedEdge = graph.getSelectedEdge();
+        data.clear();
+        if (selected == null) {
+            selectedLabel.setText("No selected vertex");
+        } else {
+            selectedLabel.setText("Selected vertex:" + selected.getId());
+	    int toSelect = -1;
+            for (Edge e : selected.adjEdges()) {
+                data.add(e);
+                //ak je hrana e zvolena, zvol ju
+                if(e==selectedEdge) {
+		    toSelect = data.size()-1;
+                }
+            }
+	    listView.getSelectionModel().selectIndices(toSelect);
+        }
+    }
+
+    /**
+     * Otvorenie súboru na načítanie a posunutie scannera grafu, aby sa načítal.
+     * @param sf názov vstupného súboru
+     * @throws java.io.IOException
+     */
+    private void openFile(String sf) throws java.io.IOException {
+        Scanner s = new Scanner(new File(sf));
+        try {
+            graph.read(s);
+        } catch (Exception e) {
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Information Dialog");
+            alert.setHeaderText(null);
+            alert.setContentText(e.getMessage());
+
+            alert.showAndWait();
+        }
+        s.close();
+        selectionUpdated();
+    }
+
+    /**
+     * Otvorenie súboru na výpis a posunutie streamu grafu, aby sa vypísal.
+     * @param s vstupný súbor
+     * @throws java.io.IOException
+     */
+    private void saveFile(String s) throws java.io.IOException {
+        PrintStream out = new PrintStream(s);
+        graph.print(out, true);
+        out.close();
+    }
+}
