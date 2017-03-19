@@ -52,7 +52,7 @@ public class Editor {
             double g = (double)Integer.parseInt(gText.getText());
             double b = (double)Integer.parseInt(bText.getText());
             if (r >= 0 && g >= 0 && b >= 0 && r < 256 && g < 256 && b < 256) {
-              vertex.setColorName(new Color(r / 255,g / 255,b / 255,1).toString());
+              vertex.setColorName(new Color(r / 255, g / 255, b / 255, 1).toString());
               dialog.close();
             }
           } catch (Exception e) {
@@ -62,22 +62,22 @@ public class Editor {
       });
 
       pan.getColumnConstraints().add(new ColumnConstraints(100));
-      pan.setRowIndex(rLabel,0);
-      pan.setColumnIndex(rLabel,0);
-      pan.setRowIndex(rText,0);
-      pan.setColumnIndex(rText,1);
-      pan.setRowIndex(gLabel,1);
-      pan.setColumnIndex(gLabel,0);
-      pan.setRowIndex(gText,1);
-      pan.setColumnIndex(gText,1);
-      pan.setRowIndex(bLabel,2);
-      pan.setColumnIndex(bLabel,0);
-      pan.setRowIndex(bText,2);
-      pan.setColumnIndex(bText,1);
-      pan.setRowIndex(ok,3);
-      pan.setColumnIndex(ok,1);
+      pan.setRowIndex(rLabel, 0);
+      pan.setColumnIndex(rLabel, 0);
+      pan.setRowIndex(rText, 0);
+      pan.setColumnIndex(rText, 1);
+      pan.setRowIndex(gLabel, 1);
+      pan.setColumnIndex(gLabel, 0);
+      pan.setRowIndex(gText, 1);
+      pan.setColumnIndex(gText, 1);
+      pan.setRowIndex(bLabel, 2);
+      pan.setColumnIndex(bLabel, 0);
+      pan.setRowIndex(bText, 2);
+      pan.setColumnIndex(bText, 1);
+      pan.setRowIndex(ok, 3);
+      pan.setColumnIndex(ok, 1);
 
-      pan.getChildren().addAll(rLabel,rText,gLabel,gText,bLabel,bText, ok);
+      pan.getChildren().addAll(rLabel, rText, gLabel, gText, bLabel, bText, ok);
 
       Scene sc = new Scene(pan);
       this.setScene(sc);

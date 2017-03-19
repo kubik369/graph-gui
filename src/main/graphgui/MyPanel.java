@@ -33,7 +33,7 @@ public class MyPanel extends Pane implements ExtendedGraph.GraphObserver {
 
     mp = this;
     this.setOnMouseClicked((MouseEvent event) -> {
-      graph.addVertex(event.getX(),event.getY());
+      graph.addVertex(event.getX(), event.getY());
     });
     this.setOnMouseMoved((MouseEvent event) -> {
       gui.setInfoLabelText(String.format("[%2f,%2f]", event.getX(), event.getY()));
@@ -43,7 +43,7 @@ public class MyPanel extends Pane implements ExtendedGraph.GraphObserver {
   /**
    * Metóda, ktorou sa panelu oznamuje, že bol pridaný vrchol.
    * Nastaví vrcholu eventy a pridá jeho vykreslenie.
-   * 
+   *
    * @param vertex pridaný vrchol
    * @throws IllegalArgumentException ak vrchol nebol korektný
    */

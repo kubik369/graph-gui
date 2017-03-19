@@ -112,20 +112,20 @@ public class GraphGUI extends Application implements ExtendedGraph.GraphObserver
     );
 
     panel.getColumnConstraints().add(new ColumnConstraints(BTNSIZE));
-    GridPane.setRowIndex(del,0);
-    GridPane.setColumnIndex(del,0);
+    GridPane.setRowIndex(del, 0);
+    GridPane.setColumnIndex(del, 0);
     del.setMinWidth(BTNSIZE);
-    GridPane.setRowIndex(edel,1);
-    GridPane.setColumnIndex(edel,0);
+    GridPane.setRowIndex(edel, 1);
+    GridPane.setColumnIndex(edel, 0);
     edel.setMinWidth(BTNSIZE);
-    GridPane.setRowIndex(ebtn,2);
-    GridPane.setColumnIndex(ebtn,0);
+    GridPane.setRowIndex(ebtn, 2);
+    GridPane.setColumnIndex(ebtn, 0);
     ebtn.setMinWidth(BTNSIZE);
-    GridPane.setRowIndex(abtn,3);
-    GridPane.setColumnIndex(abtn,0);
+    GridPane.setRowIndex(abtn, 3);
+    GridPane.setColumnIndex(abtn, 0);
     abtn.setMinWidth(BTNSIZE);
 
-    panel.getChildren().addAll(del,edel,ebtn,abtn);
+    panel.getChildren().addAll(del, edel, ebtn, abtn);
     rpanel.setCenter(listView);
     rpanel.setTop(selectedLabel);
     rpanel.setBottom(panel);
