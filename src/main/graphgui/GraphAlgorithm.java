@@ -1,10 +1,10 @@
-package graphgui;
+package main.graphgui;
 
 /**
  * Trieda, ktorá má obsahovať implementáciu požadovaného grafového
  * algoritmu z úlohy B. V tejto triede používajte iba metódy z
  * rozhraní Graph, Edge a Vertex. Nevolajte priamo žiadne metódy
- * z iných tried balíčka graphgui. Nemeňte hlavičku
+ * z iných tried balíčka main.graphgui. Nemeňte hlavičku
  * konštruktora ani metódy performAlgorithm, môžete však
  * samozrejme zmeniť ich telo a pridávať do triedy vlastné metódy,
  * premenné a pomocné triedy.

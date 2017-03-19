@@ -1,10 +1,9 @@
-package graphgui;
+package main.graphgui;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.ColumnConstraints;
@@ -18,7 +17,7 @@ import javafx.stage.StageStyle;
  * Trieda, ktorá má obsahovať implementáciu JavaFXovej úlohy A. V
  * tejto triede používajte iba metódy rozhraní Graph, Vertex a Edge,
  * nevolajte priamo žiadne metódy z iných tried balíčka
- * graphgui. Nemeňte hlavičku konštruktora ani public metód edit,
+ * main.graphgui. Nemeňte hlavičku konštruktora ani public metód edit,
  * editEdge a editVertex, môžete však samozrejme zmeniť ich telo a
  * pridávať do triedy vlastné metódy, premenné, prípadne pomocné
  * triedy.

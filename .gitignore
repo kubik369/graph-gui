@@ -17,3 +17,9 @@ nbproject/
 *.jar
 *.war
 *.ear
+
+# IntelliJ specifics
+.idea/
+out/
+graph-gui.iml
+intellij-java-google-style.xml
