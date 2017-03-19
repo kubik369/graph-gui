@@ -11,5 +11,4 @@ install:
     - wget http://downloads.sourceforge.net/project/checkstyle/checkstyle/7.6/checkstyle-7.6-all.jar
     
 script:
-    - FILES="$(ls src/main/graphgui)"
-    - java -jar checkstyle-7.6-all.jar -c /google_checks.xml $FILES
+    - java -jar checkstyle-7.6-all.jar -c /google_checks.xml src/main/graphgui

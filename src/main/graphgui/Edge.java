@@ -14,55 +14,55 @@ package graphgui;
  */
 public interface Edge {
 
-    /**
-     * Vráti počiatočný vrchol hrany.
-     */
-    public Vertex getOrigin();
+  /**
+   * Vráti počiatočný vrchol hrany.
+   */
+  public Vertex getOrigin();
 
-    /**
-     * Vráti id počiatočného vrchola hrany.
-     */
-    public int getOriginId();
+  /**
+   * Vráti id počiatočného vrchola hrany.
+   */
+  public int getOriginId();
 
-    /**
-     * Vráti koncový vrchol hrany.
-     */
-    public Vertex getDestination();
+  /**
+   * Vráti koncový vrchol hrany.
+   */
+  public Vertex getDestination();
 
-    /**
-     * Vráti id koncového vrchola hrany.
-     */
-    public int getDestinationId();
+  /**
+   * Vráti id koncového vrchola hrany.
+   */
+  public int getDestinationId();
 
-    /**
-     * Vráti celočíselnú hodnotu uloženú na hrane.
-     */
-    int getValue();
+  /**
+   * Vráti celočíselnú hodnotu uloženú na hrane.
+   */
+  int getValue();
 
-    /**
-      * Nastaví hodnotu hrany na zadané číslo.
-      * Modifikuje aj hodnotu hrany idúcej v opačnom smere.
-      * @param value nová hodnota hrany.
-      */
-    void setValue(int value);
+  /**
+    * Nastaví hodnotu hrany na zadané číslo.
+    * Modifikuje aj hodnotu hrany idúcej v opačnom smere.
+    * @param value nová hodnota hrany.
+    */
+  void setValue(int value);
 
 
-    /**
-     * Zistí, či hrana this a hrana e sú ekvivalentné,
-     * čo nastane vtedy, keď je to ten istý objekt, alebo ak
-     * sú to kópie tej istej hrany idúce v opačnom smere.
-     */
-    public boolean isEquivalent(Edge e);
+  /**
+   * Zistí, či hrana this a hrana e sú ekvivalentné,
+   * čo nastane vtedy, keď je to ten istý objekt, alebo ak
+   * sú to kópie tej istej hrany idúce v opačnom smere.
+   */
+  public boolean isEquivalent(Edge e);
 
-    /**
-     * Vráti objekt reprezentujúci tú istú hranu v opčanom smere.
-     */
-    Edge getReverse();
+  /**
+   * Vráti objekt reprezentujúci tú istú hranu v opčanom smere.
+   */
+  Edge getReverse();
 
-    /**
-     * Vráti buď this alebo reverse() podľa toho, ktorý smer hrany je
-     * primárny, teda uložený v zozname všetkých hrán grafu.
-     */
-    Edge getPrimary();
+  /**
+   * Vráti buď this alebo reverse() podľa toho, ktorý smer hrany je
+   * primárny, teda uložený v zozname všetkých hrán grafu.
+   */
+  Edge getPrimary();
 
 }
