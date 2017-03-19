@@ -1,7 +1,6 @@
-package graphgui;
+package main.graphgui;
 
 import javafx.geometry.Insets;
-import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;

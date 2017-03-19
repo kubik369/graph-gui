@@ -1,4 +1,4 @@
-package graphgui;
+package main.graphgui;
 
 import java.io.PrintStream;
 import java.util.Scanner;
