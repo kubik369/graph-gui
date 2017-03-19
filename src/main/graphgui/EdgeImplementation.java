@@ -24,19 +24,23 @@ public final class EdgeImplementation implements Edge {
     return isPrimary;
   }
 
-  @Override public VertexImplementation getOrigin() {
+  @Override
+  public VertexImplementation getOrigin() {
     return from;
   }
 
-  @Override public int getOriginId() {
+  @Override
+  public int getOriginId() {
     return getOrigin().getId();
   }
 
-  @Override public VertexImplementation getDestination() {
+  @Override
+  public VertexImplementation getDestination() {
     return to;
   }
 
-  @Override public int getDestinationId() {
+  @Override
+  public int getDestinationId() {
     return getDestination().getId();
   }
 
@@ -54,7 +58,8 @@ public final class EdgeImplementation implements Edge {
     }
   }
 
-  @Override public boolean isEquivalent(Edge e) {
+  @Override
+  public boolean isEquivalent(Edge e) {
     return e == this || e == reverse;
   }
 
@@ -83,13 +88,15 @@ public final class EdgeImplementation implements Edge {
     isPrimary = false;
   }
 
-  @Override public String toString() {
+  @Override
+  public String toString() {
     Integer ifrom = getOriginId();
     Integer ito = getDestinationId();
     return "(" + ifrom + "," + ito + ") value " + value;
   }
 
-  @Override public void setValue(int value) {
+  @Override
+  public void setValue(int value) {
     if (!isPrimary()) {
       reverse.setValue(value);
       return;
@@ -101,7 +108,8 @@ public final class EdgeImplementation implements Edge {
     }
   }
 
-  @Override public int getValue() {
+  @Override
+  public int getValue() {
     return value;
   }
 }

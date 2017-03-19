@@ -68,7 +68,8 @@ public class GraphGUI extends Application implements ExtendedGraph.GraphObserver
 
   private final Menu menu1 = new Menu("File");
 
-  @Override public void start(Stage primaryStage) {
+  @Override
+  public void start(Stage primaryStage) {
     graph.addObserver(this);
 
     MenuBar menuBar = new MenuBar();

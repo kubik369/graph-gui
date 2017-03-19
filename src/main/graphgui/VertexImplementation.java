@@ -33,7 +33,8 @@ public final class VertexImplementation implements Vertex {
     this.y = y;
   }
 
-  @Override public int getId() {
+  @Override
+  public int getId() {
     return id;
   }
 
@@ -44,7 +45,8 @@ public final class VertexImplementation implements Vertex {
     }
   }
 
-  @Override public Iterable<Vertex> adjVertices() {
+  @Override
+  public Iterable<Vertex> adjVertices() {
     ArrayList<Vertex> a = new ArrayList<Vertex>();
     for (Edge e : edges) {
       a.add(e.getDestination());
@@ -52,7 +54,8 @@ public final class VertexImplementation implements Vertex {
     return Collections.unmodifiableList(a);
   }
 
-  @Override public Iterable<Integer> adjVertexIds() {
+  @Override
+  public Iterable<Integer> adjVertexIds() {
     ArrayList<Integer> a = new ArrayList<Integer>();
     for (Edge e : edges) {
       a.add(e.getDestinationId());
@@ -60,7 +63,8 @@ public final class VertexImplementation implements Vertex {
     return Collections.unmodifiableList(a);
   }
 
-  @Override public Iterable<Edge> adjEdges() {
+  @Override
+  public Iterable<Edge> adjEdges() {
     return Collections.unmodifiableList(new ArrayList<Edge>(edges));
   }
 
@@ -72,7 +76,8 @@ public final class VertexImplementation implements Vertex {
     return edges.remove(e);
   }
 
-  @Override public EdgeImplementation findEdge(Vertex v) {
+  @Override
+  public EdgeImplementation findEdge(Vertex v) {
     for (EdgeImplementation e : edges) {
       if (e.getDestination() == v) {
         return e;
@@ -81,62 +86,73 @@ public final class VertexImplementation implements Vertex {
     return null;
   }
 
-  @Override public void setValue(int value) {
+  @Override
+  public void setValue(int value) {
     if (value != this.value) {
       this.value = value;
       graph.vertexChanged(this);
     }
   }
 
-  @Override public int getValue() {
+  @Override
+  public int getValue() {
     return value;
   }
 
-  @Override public void setX(double x) {
+  @Override
+  public void setX(double x) {
     if (x != this.x) {
       this.x = x;
       graph.vertexChanged(this);
     }
   }
 
-  @Override public void setY(double y) {
+  @Override
+  public void setY(double y) {
     if (y != this.y) {
       this.y = y;
       graph.vertexChanged(this);
     }
   }
 
-  @Override public void setColorName(String colorName) {
+  @Override
+  public void setColorName(String colorName) {
     if (!this.colorName.equals(colorName)) {
       this.colorName = colorName;
       graph.vertexChanged(this);
     }
   }
 
-  @Override public void setSize(double size) {
+  @Override
+  public void setSize(double size) {
     if (size != this.size) {
       this.size = size;
       graph.vertexChanged(this);
     }
   }
 
-  @Override public double getSize() {
+  @Override
+  public double getSize() {
     return size;
   }
 
-  @Override public double getX() {
+  @Override
+  public double getX() {
     return x;
   }
 
-  @Override public double getY() {
+  @Override
+  public double getY() {
     return y;
   }
 
-  @Override public String getColorName() {
+  @Override
+  public String getColorName() {
     return colorName;
   }
 
-  @Override public String toString() {
+  @Override
+  public String toString() {
     Integer id = getId();
     return String.format("%s (%2f,%2f) value %d", id.toString(), getX(), getY(), value);
   }
