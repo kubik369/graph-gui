@@ -14,38 +14,26 @@ package graphgui;
  */
 public interface Edge {
 
-  /**
-   * Vráti počiatočný vrchol hrany.
-   */
+  /** Vráti počiatočný vrchol hrany. */
   public Vertex getOrigin();
 
-  /**
-   * Vráti id počiatočného vrchola hrany.
-   */
+  /** Vráti id počiatočného vrchola hrany. */
   public int getOriginId();
 
-  /**
-   * Vráti koncový vrchol hrany.
-   */
+  /** Vráti koncový vrchol hrany. */
   public Vertex getDestination();
 
-  /**
-   * Vráti id koncového vrchola hrany.
-   */
+  /** Vráti id koncového vrchola hrany. */
   public int getDestinationId();
 
-  /**
-   * Vráti celočíselnú hodnotu uloženú na hrane.
-   */
+  /** Vráti celočíselnú hodnotu uloženú na hrane. */
   int getValue();
 
   /**
-    * Nastaví hodnotu hrany na zadané číslo.
-    * Modifikuje aj hodnotu hrany idúcej v opačnom smere.
-    * @param value nová hodnota hrany.
-    */
+   * Nastaví hodnotu hrany na zadané číslo. Modifikuje aj hodnotu hrany idúcej v opačnom smere.
+   * @param value nová hodnota hrany.
+   */
   void setValue(int value);
-
 
   /**
    * Zistí, či hrana this a hrana e sú ekvivalentné,
@@ -54,9 +42,7 @@ public interface Edge {
    */
   public boolean isEquivalent(Edge e);
 
-  /**
-   * Vráti objekt reprezentujúci tú istú hranu v opčanom smere.
-   */
+  /** Vráti objekt reprezentujúci tú istú hranu v opčanom smere. */
   Edge getReverse();
 
   /**
@@ -64,5 +50,4 @@ public interface Edge {
    * primárny, teda uložený v zozname všetkých hrán grafu.
    */
   Edge getPrimary();
-
 }

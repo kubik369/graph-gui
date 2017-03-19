@@ -14,7 +14,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-/** Trieda, ktorá má obsahovať implementáciu JavaFXovej úlohy A. V
+/**
+ * Trieda, ktorá má obsahovať implementáciu JavaFXovej úlohy A. V
  * tejto triede používajte iba metódy rozhraní Graph, Vertex a Edge,
  * nevolajte priamo žiadne metódy z iných tried balíčka
  * graphgui. Nemeňte hlavičku konštruktora ani public metód edit,
@@ -26,21 +27,21 @@ public class Editor {
 
   // POMOCNÁ TRIEDA PRE UKÁŽKOVÝ PRÍKLAD, MEŇTE PODĽA POTREBY
   class MyStage extends Stage {
-    Vertex v;
-    
+    Vertex vertex;
+
     MyStage(Vertex vertex) {
-      v = vertex;
+      this.vertex = vertex;
       MyStage dialog = this;
       GridPane pan = new GridPane();
 
       Color c = Color.web(vertex.getColorName());
 
-      TextField rText = new TextField((int)(c.getRed() * 255) + "");
-      TextField gText = new TextField((int)(c.getGreen() * 255) + "");
-      TextField bText = new TextField((int)(c.getBlue() * 255) + "");
-      Label rLabel = new Label("Red (0-255): ");
-      Label gLabel = new Label("Green (0-255): ");
-      Label bLabel = new Label("Blue (0-255): ");
+      final TextField rText = new TextField((int)(c.getRed() * 255) + "");
+      final TextField gText = new TextField((int)(c.getGreen() * 255) + "");
+      final TextField bText = new TextField((int)(c.getBlue() * 255) + "");
+      final Label rLabel = new Label("Red (0-255): ");
+      final Label gLabel = new Label("Green (0-255): ");
+      final Label bLabel = new Label("Blue (0-255): ");
       Button ok = new Button("OK");
 
       ok.setOnAction(new EventHandler<ActionEvent>() {
@@ -113,9 +114,7 @@ public class Editor {
   }
 
   // METÓDA edit: NEMEŇTE HLAVIČKU, TELO UPRAVTE PODĽA POTREBY
-  /**
-   * Akcia, ktorá sa má vykonať v prípade, že nie je vybratý žiadny vrchol.
-   */
+  /** Akcia, ktorá sa má vykonať v prípade, že nie je vybratý žiadny vrchol. */
   public void edit() {
   }
 
