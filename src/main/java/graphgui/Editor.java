@@ -1,4 +1,4 @@
-package main.graphgui;
+package graphgui;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;

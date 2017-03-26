@@ -1,42 +1,17 @@
-package main.graphgui;
+package graphgui;
 
-import javafx.geometry.Insets;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 
 /** Trieda pre grafický panel, na ktorom umiestňujeme nakreslenie grafu. */
 public class MyPanel extends Pane implements ExtendedGraph.GraphObserver {
-  private final MyPanel mp;
+  private MyPanel mp;
   private GraphGUI gui;
-  private final ExtendedGraph graph;
+  private ExtendedGraph graph;
 
-  /**
-   * Konštruktor triedy MyPanel.
-   *
-   * @param gui Aplikácia, kde beží
-   * @param graph zobrazovaný graf
-   */
-  MyPanel(GraphGUI gui, ExtendedGraph graph) {
-    this.gui = gui;
-    this.graph = graph;
-    graph.addObserver(this);
-    this.setMinSize(400, 400);
-    this.setBackground(new Background(
-        new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY))
-    );
+  public MyPanel() {
 
-    mp = this;
-    this.setOnMouseClicked((MouseEvent event) -> {
-      graph.addVertex(event.getX(), event.getY());
-    });
-    this.setOnMouseMoved((MouseEvent event) -> {
-      gui.setInfoLabelText(String.format("[%2f,%2f]", event.getX(), event.getY()));
-    });
   }
 
   /**
@@ -135,5 +110,17 @@ public class MyPanel extends Pane implements ExtendedGraph.GraphObserver {
 
   @Override
   public void vertexChanged(Vertex vertex) {
+  }
+
+  /**
+   Initialize method.
+   */
+  public void init(GraphGUI gui) {
+    this.gui = gui;
+    this.graph = gui.getGraph();
+
+    setOnMouseClicked(event -> {
+      // TODO handle user clicks here
+    });
   }
 }
