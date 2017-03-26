@@ -1,4 +1,4 @@
-package main.graphgui;
+package graphgui;
 
 import graphics.Controller;
 import java.io.File;
@@ -38,21 +38,21 @@ public class GraphGUI extends Application {
   @Override
   public void start(Stage primaryStage) {
     try {
-      FXMLLoader loader = new FXMLLoader(getClass().getResource("../../graphics/layout.fxml"));
-      controller = loader.getController();
-
-      graphPanel = controller.graphPanel;
-      graphPanel.init(this);
-      createMenu();
-
+      FXMLLoader loader = new FXMLLoader(getClass().getResource("/graphics/layout.fxml"));
       Parent root = loader.load();
       Scene scene = new Scene(root, 800, 600);
+
       primaryStage.setMinWidth(400);
       primaryStage.setMinHeight(400);
       primaryStage.setTitle("Graph GUI");
       primaryStage.setScene(scene);
       primaryStage.show();
       primaryStage.setOnCloseRequest((e) -> System.exit(0));
+
+      controller = loader.getController();
+      graphPanel = controller.graphPanel;
+      graphPanel.init(this);
+      createMenu();
     } catch (IOException e) {
       e.printStackTrace();
     }

@@ -1,4 +1,4 @@
-package main.graphgui;
+package graphgui;
 
 /**
  * Trieda, ktorá má obsahovať implementáciu požadovaného grafového

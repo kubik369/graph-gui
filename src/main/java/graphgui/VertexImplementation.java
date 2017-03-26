@@ -1,4 +1,4 @@
-package main.graphgui;
+package graphgui;
 
 import java.util.ArrayList;
 import java.util.Collections;

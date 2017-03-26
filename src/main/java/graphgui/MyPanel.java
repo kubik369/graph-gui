@@ -1,4 +1,4 @@
-package main.graphgui;
+package graphgui;
 
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;

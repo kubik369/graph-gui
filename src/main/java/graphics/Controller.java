@@ -1,5 +1,6 @@
 package graphics;
 
+import graphgui.MyPanel;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -9,7 +10,6 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import main.graphgui.MyPanel;
 
 /**
  * Created by siegrift on 3/25/17.
@@ -26,7 +26,7 @@ public class Controller {
   public Label statusLabel;
   public BorderPane root;
   public AnchorPane mainPanel;
-  public Label VertexLabel;
+  public Label vertexLabel;
   public Label vertexNumberLabel;
   public TextField vertexValueField;
   public Label vertexColorClickableLabel;

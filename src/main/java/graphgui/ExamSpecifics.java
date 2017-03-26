@@ -1,4 +1,4 @@
-package main.graphgui;
+package graphgui;
 
 /**
  * Trieda špecificky nastavená pre jednotlivé skúšky.
