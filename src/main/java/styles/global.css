@@ -5,3 +5,19 @@ MyPanel {
 #leftPanel {
   -fx-background-color: darkgoldenrod;
 }
+
+#btnView {
+  -fx-background-color: darkkhaki;
+}
+
+#btnEditGraph {
+  -fx-background-color: darkkhaki;
+}
+
+#btnEditValues {
+  -fx-background-color: darkkhaki;
+}
+
+#btnDelete {
+  -fx-background-color: darkkhaki;
+}
