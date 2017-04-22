@@ -15,32 +15,38 @@ import javafx.stage.Stage;
 
 /**
  * Hlavná trieda aplikácie - obsahuje dizajn a funkcionalitu ovládacích
- * prvkov hlavného oknaaplikácie. Obsahuje nasledovné ovládacie prvky
- * - Label infoLabel: aktuálna pozícia myši (súradnice alebo vrchol, na ktorom je myš)
- * - Label selectedLabel: informácie o vybranom vrchole
- * - MyPanel gpanel: grafický panel
- * - ListView listView: zoznam hrán incidentných s vybraným vrcholom
- * - Button del: gombík na mazanie vybratého vrchola
- * - Button edel: gombík na mazanie vybratej hrany
- * - Button ebtn: gombík na úlohu A
- * - Button abtn: gombík na úlohu B
- * - Menu menu1: menu File s prvkami Open, Save a Exit
- * - BorderPane rpanel, GridPane panel, BorderPane root: panely na uloženie ovládacích prvkov
+ * prvkov hlavného okna aplikácie. Obsahuje nasledovné ovládacie prvky
+ - Label infoLabel: aktuálna pozícia myši (súradnice alebo vrchol, na ktorom je myš)
+ - Label selectedLabel: informácie o vybranom vrchole
+ - GraphPane gpanel: grafický panel
+ - ListView listView: zoznam hrán incidentných s vybraným vrcholom
+ - Button del: gombík na mazanie vybratého vrchola
+ - Button edel: gombík na mazanie vybratej hrany
+ - Button ebtn: gombík na úlohu A
+ - Button abtn: gombík na úlohu B
+ - Menu menu1: menu File s prvkami Open, Save a Exit
+ - BorderPane rpanel, GridPane panel, BorderPane root: panely na uloženie ovládacích prvkov
  */
 
 @SuppressWarnings("checkstyle:AbbreviationAsWordInName")
 public class GraphGUI extends Application {
 
   private final ExtendedGraph graph = new ExtendedGraph();
-  private MyPanel graphPanel;
-  private Controller controller;
+  private GraphPane graphPanel;
+
+  /**
+   * @param args the command line arguments.
+   */
+  public static void main(String[] args) {
+    launch(args);
+  }
 
   @Override
   public void start(Stage primaryStage) {
     try {
       FXMLLoader loader = new FXMLLoader(getClass().getResource("/graphics/layout.fxml"));
       Parent root = loader.load();
-      Scene scene = new Scene(root, 800, 600);
+      Scene scene = new Scene(root, 850, 620);
 
       primaryStage.setMinWidth(400);
       primaryStage.setMinHeight(400);
@@ -49,32 +55,14 @@ public class GraphGUI extends Application {
       primaryStage.show();
       primaryStage.setOnCloseRequest((e) -> System.exit(0));
 
-      controller = loader.getController();
-      graphPanel = controller.graphPanel;
-      graphPanel.init(this);
-      createMenu();
+      Controller controller = loader.getController();
+      controller.menuItemCloseProgram.setOnAction(event -> System.exit(0));
+      this.graphPanel = controller.gpGraph;
+      this.graphPanel.init(controller, this.graph);
+
     } catch (IOException e) {
       e.printStackTrace();
     }
-  }
-
-  public MyPanel getGraphPanel() {
-    return graphPanel;
-  }
-
-  public Controller getController() {
-    return controller;
-  }
-
-  private void createMenu() {
-    controller.closeProgramMenuItem.setOnAction(event -> System.exit(0));
-  }
-
-  /**
-   * @param args the command line arguments.
-   */
-  public static void main(String[] args) {
-    launch(args);
   }
 
   /** Vykoná potrebné akcie po zmene vybranej hrany alebo vrchola alebo ich vlastností. */
@@ -107,7 +95,7 @@ public class GraphGUI extends Application {
   private void openFile(String sf) throws java.io.IOException {
     Scanner s = new Scanner(new File(sf));
     try {
-      graph.read(s);
+      this.graph.read(s);
     } catch (Exception e) {
       Alert alert = new Alert(AlertType.INFORMATION);
       alert.setTitle("Information Dialog");
@@ -126,20 +114,15 @@ public class GraphGUI extends Application {
    */
   private void saveFile(String s) throws java.io.IOException {
     PrintStream out = new PrintStream(s);
-    graph.print(out, true);
+    this.graph.print(out, true);
     out.close();
   }
 
-  /** Nastavenie textu s informáciou o pozícii myši. */
-  public void setInfoLabelText(String s) {
-    //infoLabel.setText(s);
-  }
-
-  public void setSelectedLabelText(String s) {
-    //selectedLabel.setText(s);
-  }
-
   public ExtendedGraph getGraph() {
-    return graph;
+    return this.graph;
+  }
+
+  public GraphPane getGraphPanel() {
+    return this.graphPanel;
   }
 }

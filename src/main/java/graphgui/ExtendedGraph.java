@@ -1,7 +1,9 @@
 package graphgui;
 
+import graphgui.enums.GraphMode;
 import java.util.ArrayList;
 import java.util.HashMap;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
@@ -53,9 +55,6 @@ public class ExtendedGraph extends GraphImplementation {
   private HashMap<Vertex, Rectangle> vertexShapes;
   private HashMap<Edge, Line> edgeShapes;
 
-  private Edge selectedEdge = null;  // nemusi byt primary
-  private Vertex selectedVertex = null;
-
   /**
    * Konštruktor.
    */
@@ -86,7 +85,7 @@ public class ExtendedGraph extends GraphImplementation {
 
   @Override
   public void removeVertex(Vertex v) {
-    if (selectedVertex == v) {
+    if (v == State.getState().getSelectedVertex()) {
       deselectVertex();
     }
     super.removeVertex(v);
@@ -110,7 +109,7 @@ public class ExtendedGraph extends GraphImplementation {
   @Override
   public void removeEdge(Edge e) throws IllegalArgumentException {
     e = e.getPrimary();
-    if (e.isEquivalent(selectedEdge)) {
+    if (e.isEquivalent(State.getState().getSelectedEdge())) {
       deselectEdge();
     }
     super.removeEdge(e);
@@ -147,7 +146,7 @@ public class ExtendedGraph extends GraphImplementation {
     r.setWidth(v.getSize());
     r.setHeight(v.getSize());
     r.setFill(Color.web(v.getColorName()));
-    if (v == selectedVertex) {
+    if (v == State.getState().getSelectedVertex()) {
       r.setStroke(highlightBorderCol);
     } else {
       r.setStroke(defaultBorderCol);
@@ -163,7 +162,7 @@ public class ExtendedGraph extends GraphImplementation {
     l.setStartY(e.getOrigin().getY() + offset1);
     l.setEndX(e.getDestination().getX() + offset2);
     l.setEndY(e.getDestination().getY() + offset2);
-    if (e.isEquivalent(selectedEdge)) {
+    if (e.isEquivalent(State.getState().getSelectedEdge())) {
       l.setStroke(highlightEdgeColor);
     } else {
       l.setStroke(defaultEdgeColor);
@@ -183,9 +182,9 @@ public class ExtendedGraph extends GraphImplementation {
    * Zruší výber hrany.
    */
   public void deselectEdge() {
-    if (selectedEdge != null) {
-      Edge old = selectedEdge;
-      selectedEdge = null;
+    if (State.getState().getSelectedEdge() != null) {
+      Edge old = State.getState().getSelectedEdge();
+      State.getState().setSelectedEdge(null);
       updateEdgeShape(old);
       for (GraphObserver o : observers) {
         o.edgeDeselected(old);
@@ -197,10 +196,10 @@ public class ExtendedGraph extends GraphImplementation {
    * Zruší výber vrcholu.
    */
   public void deselectVertex() {
-    if (selectedVertex != null) {
+    if (State.getState().getSelectedVertex() != null) {
       deselectEdge();
-      Vertex old = selectedVertex;
-      selectedVertex = null;
+      Vertex old = State.getState().getSelectedVertex();
+      State.getState().setSelectedVertex(null);
       updateVertexShape(old);
       for (GraphObserver o : observers) {
         o.vertexDeselected(old);
@@ -216,12 +215,16 @@ public class ExtendedGraph extends GraphImplementation {
     if (v == null) {
       throw new NullPointerException("Selecting null vertex");
     }
-    if (v != selectedVertex) {
+    if (State.getState().getMode() == GraphMode.DELETE) {
+      return;
+    }
+
+    if (v != State.getState().getSelectedVertex()) {
       deselectVertex();
-      selectedVertex = v;
+      State.getState().setSelectedVertex(v);
       updateVertexShape(v);
       for (GraphObserver o : observers) {
-        o.vertexSelected(selectedVertex);
+        o.vertexSelected(v);
       }
     }
   }
@@ -234,12 +237,12 @@ public class ExtendedGraph extends GraphImplementation {
     if (e == null) {
       throw new NullPointerException("Selecting null edge");
     }
-    if (e != selectedEdge) {
+    if (e != State.getState().getSelectedVertex()) {
       deselectEdge();
-      selectedEdge = e;
+      State.getState().setSelectedEdge(e);
       updateEdgeShape(e);
       for (GraphObserver o : observers) {
-        o.edgeSelected(selectedEdge);
+        o.edgeSelected(e);
       }
     }
   }
@@ -248,8 +251,8 @@ public class ExtendedGraph extends GraphImplementation {
    * Metóda, ktorá zmaže z grafu vybraný vrchol, ak taký existuje.
    */
   public void removeSelectedVertex() {
-    if (selectedVertex != null) {
-      removeVertex(selectedVertex);
+    if (State.getState().getSelectedVertex() != null) {
+      removeVertex(State.getState().getSelectedVertex());
     }
   }
 
@@ -257,8 +260,8 @@ public class ExtendedGraph extends GraphImplementation {
    * Metóda, ktorá zmaže z grafu vybranú hranu, ak taká existuje.
    */
   public void  removeSelectedEdge() {
-    if (selectedEdge != null) {
-      removeEdge(selectedEdge);
+    if (State.getState().getSelectedEdge() != null) {
+      removeEdge(State.getState().getSelectedEdge());
     }
   }
 
@@ -267,6 +270,7 @@ public class ExtendedGraph extends GraphImplementation {
    * @param vertex Vrchol z ktorého viesť hranu.
    */
   public void addEdgeFromSelected(Vertex vertex) {
+    Vertex selectedVertex = State.getState().getSelectedVertex();
     if (selectedVertex != null && selectedVertex != vertex
             && findEdge(selectedVertex, vertex) == null) {
       Edge newEdge = addEdge(selectedVertex, vertex);
@@ -278,18 +282,22 @@ public class ExtendedGraph extends GraphImplementation {
    * @param vertex Vrchol na ktorom vykonať operáciu.
    */
   public void toggleVertexSelection(Vertex vertex) {
-    if (selectedVertex == vertex) {
+    if (vertex == State.getState().getSelectedVertex()) {
       deselectVertex();
     } else {
       selectVertex(vertex);
     }
   }
 
-  public Vertex getSelectedVertex() {
-    return selectedVertex;
-  }
-
-  public Edge getSelectedEdge() {
-    return selectedEdge;
+  /**
+   * Označí hranu pokiaľ nie je vybratá, odznačí ju pokiaľ je.
+   * @param edge Hrana na ktorej vykonať operáciu.
+   */
+  public void toggleEdgeSelection(Edge edge) {
+    if (edge == State.getState().getSelectedEdge()) {
+      deselectEdge();
+    } else {
+      selectEdge(edge);
+    }
   }
 }

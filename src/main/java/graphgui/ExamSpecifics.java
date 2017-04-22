@@ -13,8 +13,8 @@ public class ExamSpecifics {
   public static void edit(ExtendedGraph graph) throws Exception {
     Editor e = new Editor((Graph)graph);
     try {
-      if (graph.getSelectedVertex() != null) {
-        e.editVertex(graph.getSelectedVertex());
+      if (State.getState().getSelectedVertex() != null) {
+        e.editVertex(State.getState().getSelectedVertex());
       } else {
         e.edit();
       }
