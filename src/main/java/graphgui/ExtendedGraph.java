@@ -3,7 +3,6 @@ package graphgui;
 import graphgui.enums.GraphMode;
 import java.util.ArrayList;
 import java.util.HashMap;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
@@ -62,6 +61,7 @@ public class ExtendedGraph extends GraphImplementation {
     observers = new ArrayList<GraphObserver>();
     vertexShapes = new HashMap<Vertex, Rectangle>();
     edgeShapes = new HashMap<Edge, Line>();
+    State.getState().setExtendedGraph(this);
   }
 
   public void addObserver(GraphObserver o) {

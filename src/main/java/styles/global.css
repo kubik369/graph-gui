@@ -1,8 +1,4 @@
-MyPanel {
-  -fx-background-color: antiquewhite;
-}
-
-#leftPanel {
+#apLeft {
   -fx-background-color: darkgoldenrod;
 }
 

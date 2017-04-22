@@ -22,8 +22,17 @@ public final class State {
   }
 
   private GraphMode mode = GraphMode.VIEW;
-  private Vertex selectedVertex = null;
-  private Edge selectedEdge = null;
+  private Vertex selectedVertex;
+  private Edge selectedEdge;
+  private ExtendedGraph extendedGraph;
+
+  public ExtendedGraph getExtendedGraph() {
+    return extendedGraph;
+  }
+
+  public void setExtendedGraph(ExtendedGraph extendedGraph) {
+    this.extendedGraph = extendedGraph;
+  }
 
   public Vertex getSelectedVertex() {
     return selectedVertex;
