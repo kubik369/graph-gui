@@ -63,12 +63,12 @@ public class Controller {
 
   @FXML
   protected void changeMode(ActionEvent event) {
-    Object source = event.getSource();
-
     this.btnView.setStyle("-fx-background-color: darkkhaki;");
     this.btnEditGraph.setStyle("-fx-background-color: darkkhaki;");
     this.btnEditValues.setStyle("-fx-background-color: darkkhaki;");
     this.btnDelete.setStyle("-fx-background-color: darkkhaki;");
+
+    Object source = event.getSource();
     ((Button)source).setStyle("-fx-background-color: yellow;");
 
     State state = State.getState();

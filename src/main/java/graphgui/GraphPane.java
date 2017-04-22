@@ -18,13 +18,16 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
   private ExtendedGraph graph;
   private final Line edgeLine;
 
+  /**
+   * Inicializuje grafový panel.
+   */
   public GraphPane() {
     this.edgeLine = new Line();
     this.setOnMouseMoved((MouseEvent e) -> {
       Vertex v = State.getState().getSelectedVertex();
       if (State.getState().getMode() == GraphMode.EDIT_GRAPH && v != null) {
-        this.edgeLine.setStartX(v.getX());
-        this.edgeLine.setStartY(v.getY());
+        this.edgeLine.setStartX(v.getX() + v.getSize() / 2);
+        this.edgeLine.setStartY(v.getY() + v.getSize() / 2);
         this.edgeLine.setEndX(e.getX());
         this.edgeLine.setEndY(e.getY());
       }
@@ -32,14 +35,15 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
     this.getChildren().add(this.edgeLine);
 
     this.setMinSize(400, 400);
-    this.setBackground(new Background(
-      new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY))
-    );
+    this.setBackground(new Background(new BackgroundFill(
+        Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY
+    )));
   }
 
   /**
-   * Inicializácia.
-   * @param g Hlavná objekt okna aplikácie
+   * Inicializácia po naloadovaní FXML.
+   * @param controller Controller okna aplikácie
+   * @param graph Objekt držiaci informácie o grafe
    */
   public void init(Controller controller, ExtendedGraph graph) {
     this.controller = controller;
@@ -77,7 +81,7 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
           this.graph.toggleVertexSelection(vertex);
         }
       } else if (state.getMode() == GraphMode.EDIT_VALUES) {
-
+        // TODO finish EDIT_VALUES mode
       }
 
       event.consume();

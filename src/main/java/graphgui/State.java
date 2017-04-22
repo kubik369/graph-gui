@@ -2,11 +2,18 @@ package graphgui;
 
 import graphgui.enums.GraphMode;
 
+/**
+ * State of the application.
+ * Holds chosen modes and other necessary settings.
+ */
 public final class State {
   private static State state = null;
 
   protected State() {}
 
+  /**
+   * Singleton of the state.
+   */
   public static State getState() {
     if (state == null) {
       state = new State();
