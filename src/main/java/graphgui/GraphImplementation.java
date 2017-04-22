@@ -81,7 +81,7 @@ public class GraphImplementation implements Graph {
   }
 
   private void checkVertex(Vertex v) throws IllegalArgumentException {
-    int id = v.getId();
+    int id = v.getIndex();
     if (id < 0 || id >= getNumberOfVertices() ||  vertices.get(id) != v) {
       throw new IllegalArgumentException("neexistujuci vrchol");
     }

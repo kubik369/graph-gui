@@ -13,8 +13,8 @@ package graphgui;
  */
 public interface Vertex {
 
-  /** Vráti id vrcholu (číslo od 0 po N-1, kde N je počet vrcholov grafu). */
-  int getId();
+  /** Vráti index vrcholu (číslo od 0 po N-1, kde N je počet vrcholov grafu). */
+  int getIndex();
 
   /** Vráti iterovateľnú skupinu vrcholov susediacich vrcholom this. */
   public Iterable<Vertex> adjVertices();

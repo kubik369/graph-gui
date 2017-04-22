@@ -25,6 +25,7 @@ public final class State {
   private Vertex selectedVertex;
   private Edge selectedEdge;
   private ExtendedGraph extendedGraph;
+  private int vertexId;
 
   public ExtendedGraph getExtendedGraph() {
     return extendedGraph;
@@ -56,5 +57,9 @@ public final class State {
 
   public void setMode(GraphMode m) {
     this.mode = m;
+  }
+
+  public int nextVertexId() {
+    return this.vertexId++;
   }
 }

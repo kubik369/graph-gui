@@ -33,7 +33,8 @@
   </top>
   <center>
     <AnchorPane>
-      <AnchorPane prefHeight="436.0" prefWidth="640.0" AnchorPane.bottomAnchor="155.0">
+      <AnchorPane prefHeight="436.0" prefWidth="640.0" AnchorPane.bottomAnchor="155.0"
+        AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <GraphPane fx:id="gpGraph" prefHeight="200.0" prefWidth="200.0"
           AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="220.0"
           AnchorPane.rightAnchor="220.0" AnchorPane.topAnchor="10.0"

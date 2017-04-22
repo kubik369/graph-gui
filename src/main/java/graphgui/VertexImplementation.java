@@ -11,7 +11,7 @@ import java.util.Collections;
 public final class VertexImplementation implements Vertex {
 
   private static final int defaultValue = 1;
-  private final double defaultSize = 20.0;
+  private static final double DEFAULT_VERTEX_SIZE = 15.0;
   private static final String defaultColorName = "white";
 
   private GraphImplementation graph;
@@ -23,7 +23,7 @@ public final class VertexImplementation implements Vertex {
   private double x;
   @SuppressWarnings("checkstyle:MemberName")
   private double y;
-  private double size = defaultSize;
+  private double size = DEFAULT_VERTEX_SIZE;
 
   VertexImplementation(GraphImplementation graph, int id, double x, double y) {
     edges = new ArrayList<EdgeImplementation>();
@@ -34,7 +34,7 @@ public final class VertexImplementation implements Vertex {
   }
 
   @Override
-  public int getId() {
+  public int getIndex() {
     return id;
   }
 
@@ -153,7 +153,7 @@ public final class VertexImplementation implements Vertex {
 
   @Override
   public String toString() {
-    Integer id = getId();
+    Integer id = getIndex();
     return String.format("%s (%2f,%2f) value %d", id.toString(), getX(), getY(), value);
   }
 }

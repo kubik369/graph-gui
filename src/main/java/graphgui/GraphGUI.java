@@ -73,7 +73,7 @@ public class GraphGUI extends Application {
     if (selected == null) {
       selectedLabel.setText("No selected vertex");
     } else {
-      selectedLabel.setText("Selected vertex:" + selected.getId());
+      selectedLabel.setText("Selected vertex:" + selected.getIndex());
       int toSelect = -1;
       for (Edge e : selected.adjEdges()) {
         data.add(e);
