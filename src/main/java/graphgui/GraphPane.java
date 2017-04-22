@@ -104,6 +104,7 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
   public void edgeAdded(Edge edge) throws IllegalArgumentException {
     try {
       Shape s = graph.getEdgeShape(edge);
+      s.setStyle(String.format("-fx-stroke: %s;", edge.getColorName()));
       s.setStrokeWidth(this.EDGE_WIDTH);
       s.setOnMouseClicked((MouseEvent event) -> {
         GraphMode mode = State.getState().getMode();
@@ -113,7 +114,7 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
           this.graph.removeEdge(edge);
         }
       });
-      this.getChildren().add(graph.getEdgeShape(edge));
+      this.getChildren().add(s);
     } catch (Exception ex) {
       throw new IllegalArgumentException("edgeAdded");
     }

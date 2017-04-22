@@ -186,14 +186,18 @@ public class GraphImplementation implements Graph {
   public void print(PrintStream out, boolean full) {
     out.println(getNumberOfVertices());
     for (Vertex n : getVertices()) {
-      out.print(n.getX() + " " + n.getY() + " " + n.getValue());
+      out.print(String.format("%f %f %d", n.getX(), n.getY(), n.getValue()));
       if (full) {
-        out.print(" " + n.getColorName() + " " + n.getSize());
+        out.print(String.format(" %s %f", n.getColorName(), n.getSize()));
       }
       out.println();
     }
     for (Edge e : getEdges()) {
-      out.println(e.getOriginId() + " " + e.getDestinationId() + " " + e.getValue());
+      out.print(String.format("%d %d %d", e.getOriginId(), e.getDestinationId(), e.getValue()));
+      if (full) {
+        out.print(String.format(" %s", e.getColorName()));
+      }
+      out.println();
     }
   }
 
