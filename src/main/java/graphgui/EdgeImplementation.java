@@ -9,7 +9,7 @@ package graphgui;
 public final class EdgeImplementation implements Edge {
 
   public static final int defaultValue = 1;
-  private static final String defaultColorName = "white";
+  private static final String defaultColorName = "black";
   
   private final GraphImplementation graph;
   private final VertexImplementation from;
