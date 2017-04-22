@@ -27,14 +27,18 @@ public interface Edge {
   public int getDestinationId();
 
   /** Vráti celočíselnú hodnotu uloženú na hrane. */
-  int getValue();
+  public int getValue();
 
   /**
    * Nastaví hodnotu hrany na zadané číslo. Modifikuje aj hodnotu hrany idúcej v opačnom smere.
    * @param value nová hodnota hrany.
    */
   void setValue(int value);
-
+  
+  public String getColorName();
+  
+  public void setColorName(String colorName);
+  
   /**
    * Zistí, či hrana this a hrana e sú ekvivalentné,
    * čo nastane vtedy, keď je to ten istý objekt, alebo ak

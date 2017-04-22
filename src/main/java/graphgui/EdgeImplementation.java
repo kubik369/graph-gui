@@ -9,11 +9,13 @@ package graphgui;
 public final class EdgeImplementation implements Edge {
 
   public static final int defaultValue = 1;
-
+  private static final String defaultColorName = "white";
+  
   private final GraphImplementation graph;
   private final VertexImplementation from;
   private final VertexImplementation to;
   private int value;
+  private String  colorName = defaultColorName;
 
   // hrana v opacnom smere
   private EdgeImplementation reverse;
@@ -84,6 +86,7 @@ public final class EdgeImplementation implements Edge {
     this.from = from;
     this.to = to;
     this.value = defaultValue;
+    this.colorName = defaultColorName;
     this.reverse = reverse;
     isPrimary = false;
   }
@@ -92,7 +95,7 @@ public final class EdgeImplementation implements Edge {
   public String toString() {
     Integer ifrom = getOriginId();
     Integer ito = getDestinationId();
-    return "(" + ifrom + "," + ito + ") value " + value;
+    return "(" + ifrom + "," + ito + ") value " + value + " colorName " + colorName;
   }
 
   @Override
@@ -106,6 +109,19 @@ public final class EdgeImplementation implements Edge {
       reverse.value = value;
       graph.edgeChanged(this);
     }
+  }
+  
+  @Override
+  public void setColorName(String colorName) {
+    if (!this.colorName.equals(colorName)) {
+      this.colorName = colorName;
+      graph.edgeChanged(this);
+    }
+  }
+  
+  @Override
+  public String getColorName() {
+    return colorName;
   }
 
   @Override

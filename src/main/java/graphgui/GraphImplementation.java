@@ -193,8 +193,12 @@ public class GraphImplementation implements Graph {
       out.println();
     }
     for (Edge e : getEdges()) {
-      out.println(e.getOriginId() + " " + e.getDestinationId() + " " + e.getValue());
-    }
+      out.print(e.getOriginId() + " " + e.getDestinationId() + " " + e.getValue());
+      if (full) {
+        out.print(" " + e.getColorName());
+       }
+       out.println();
+     }
   }
 
   @Override
