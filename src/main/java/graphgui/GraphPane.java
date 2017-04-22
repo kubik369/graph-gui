@@ -17,6 +17,7 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
   private Controller controller;
   private ExtendedGraph graph;
   private final Line edgeLine;
+  private static final int EDGE_WIDTH = 4;
 
   /**
    * Inicializuje grafový panel.
@@ -103,7 +104,7 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
   public void edgeAdded(Edge edge) throws IllegalArgumentException {
     try {
       Shape s = graph.getEdgeShape(edge);
-      s.setStrokeWidth(4);
+      s.setStrokeWidth(this.EDGE_WIDTH);
       s.setOnMouseClicked((MouseEvent event) -> {
         GraphMode mode = State.getState().getMode();
         if (mode == GraphMode.EDIT_VALUES) {

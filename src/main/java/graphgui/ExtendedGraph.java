@@ -290,7 +290,7 @@ public class ExtendedGraph extends GraphImplementation {
   }
 
   /**
-   * Označí hranu pokiaľ nie je vybrat8, odznačí ju pokiaľ je.
+   * Označí hranu pokiaľ nie je vybratá, odznačí ju pokiaľ je.
    * @param edge Hrana na ktorej vykonať operáciu.
    */
   public void toggleEdgeSelection(Edge edge) {
