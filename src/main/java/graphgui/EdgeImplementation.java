@@ -15,7 +15,7 @@ public final class EdgeImplementation implements Edge {
   private final VertexImplementation from;
   private final VertexImplementation to;
   private int value;
-  private String  colorName = defaultColorName;
+  private String colorName = defaultColorName;
 
   // hrana v opacnom smere
   private EdgeImplementation reverse;
@@ -95,7 +95,7 @@ public final class EdgeImplementation implements Edge {
   public String toString() {
     Integer ifrom = getOriginId();
     Integer ito = getDestinationId();
-    return "(" + ifrom + "," + ito + ") value " + value + " colorName " + colorName;
+    return String.format("(%s,%s) value %d colorName %s", ifrom, ito, value, colorName);
   }
 
   @Override
