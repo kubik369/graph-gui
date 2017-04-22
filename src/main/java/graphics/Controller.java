@@ -3,6 +3,8 @@ package graphics;
 import graphgui.GraphPane;
 import graphgui.State;
 import graphgui.enums.GraphMode;
+import graphgui.utils.GraphLoader;
+import java.io.File;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -14,10 +16,10 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 
-/**
- * Created by siegrift on 3/25/17.
- */
+
 public class Controller {
 
   public GraphPane gpGraph;
@@ -49,6 +51,8 @@ public class Controller {
   public Menu menuEdit;
   public Menu menuHelp;
   public MenuItem menuItemCloseProgram;
+  public MenuItem menuItemLoad;
+  public MenuItem menuItemSave;
 
   @FXML
   private void initialize() {
@@ -82,6 +86,44 @@ public class Controller {
       state.setMode(GraphMode.EDIT_VALUES);
     } else if (source == this.btnDelete) {
       state.setMode(GraphMode.DELETE);
+    }
+  }
+
+  /**
+   * Ukonci program.
+   */
+  public void closeProgramHandler(ActionEvent actionEvent) {
+    System.exit(0);
+  }
+
+  /**
+   * Otvori dialog na ulozenie grafu.
+   */
+  public void saveGraphHandler(ActionEvent actionEvent) {
+    FileChooser chooser = new FileChooser();
+    chooser.setTitle("Ulozit graf");
+    chooser.getExtensionFilters().clear();
+    chooser.getExtensionFilters().add(new ExtensionFilter("Grafovy subor", "*.graph"));
+    File file = chooser.showSaveDialog(null);
+    if (file != null) {
+      if (!file.getName().endsWith(".graph")) {
+        file = new File(file.getPath() + ".graph");
+      }
+      GraphLoader.saveGraph(State.getState().getExtendedGraph(), file);
+    }
+  }
+
+  /**
+   * Otvori dialog na nacitanie grafu.
+   */
+  public void loadGraphHandler(ActionEvent actionEvent) {
+    FileChooser chooser = new FileChooser();
+    chooser.setTitle("Otvorit graf");
+    chooser.getExtensionFilters().clear();
+    chooser.getExtensionFilters().add(new ExtensionFilter("Grafovy subor", "*.graph"));
+    File file = chooser.showOpenDialog(null);
+    if (file != null) {
+      GraphLoader.loadGraph(file);
     }
   }
 }

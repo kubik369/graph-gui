@@ -19,7 +19,9 @@
   <top>
     <MenuBar fx:id="menuBar" BorderPane.alignment="CENTER">
       <Menu fx:id="menuFile" mnemonicParsing="false" text="File">
-        <MenuItem fx:id="menuItemCloseProgram" mnemonicParsing="false" text="Close"/>
+        <MenuItem fx:id="menuItemSave" mnemonicParsing="false" text="Save graph" onAction="#saveGraphHandler"/>
+        <MenuItem fx:id="menuItemLoad" mnemonicParsing="false" text="Open graph" onAction="#loadGraphHandler"/>
+        <MenuItem fx:id="menuItemCloseProgram" mnemonicParsing="false" text="Close" onAction="#closeProgramHandler"/>
       </Menu>
       <Menu fx:id="menuEdit" mnemonicParsing="false" text="Edit">
         <MenuItem mnemonicParsing="false" text="asdf"/>

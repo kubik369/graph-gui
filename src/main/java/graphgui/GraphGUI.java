@@ -56,7 +56,6 @@ public class GraphGUI extends Application {
       primaryStage.setOnCloseRequest((e) -> System.exit(0));
 
       Controller controller = loader.getController();
-      controller.menuItemCloseProgram.setOnAction(event -> System.exit(0));
       this.graphPanel = controller.gpGraph;
       this.graphPanel.init(controller, this.graph);
 
