@@ -1,7 +1,6 @@
 package graphics;
 
 import graphgui.Edge;
-import graphgui.Graph;
 import graphgui.GraphAlgorithm;
 import graphgui.GraphPane;
 import graphgui.State;
@@ -12,7 +11,6 @@ import java.io.File;
 import java.util.Vector;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -22,10 +20,11 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 
@@ -57,7 +56,6 @@ public class Controller {
   @FXML
   public Label labelToVertex;
   public TextField tfEdgeValue;
-  public Label labelEdgeColorClickable;
   public MenuBar menuBar;
   public Menu menuFile;
   public Menu menuEdit;
@@ -84,6 +82,18 @@ public class Controller {
     this.cbEdgeColor.getItems().addAll(
         "black", "white", "green", "orange", "blue", "yellow"
     );
+    this.menuItemSave.setAccelerator(new KeyCodeCombination(
+        KeyCode.S,
+        KeyCombination.CONTROL_DOWN
+    ));
+    this.menuItemLoad.setAccelerator(new KeyCodeCombination(
+        KeyCode.O,
+        KeyCombination.CONTROL_DOWN
+    ));
+    this.menuItemCloseProgram.setAccelerator(new KeyCodeCombination(
+        KeyCode.Q,
+        KeyCombination.CONTROL_DOWN
+    ));
   }
 
   @FXML
