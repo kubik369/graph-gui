@@ -61,6 +61,7 @@ public class ExtendedGraph extends GraphImplementation {
     observers = new ArrayList<>();
     vertexShapes = new HashMap<>();
     edgeShapes = new HashMap<>();
+
     State.getState().setExtendedGraph(this);
   }
 

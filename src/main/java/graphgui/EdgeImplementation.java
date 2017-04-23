@@ -10,7 +10,7 @@ public final class EdgeImplementation implements Edge {
 
   public static final int defaultValue = 1;
   private static final String defaultColorName = "black";
-  
+
   private final GraphImplementation graph;
   private final VertexImplementation from;
   private final VertexImplementation to;
