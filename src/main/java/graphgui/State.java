@@ -1,6 +1,7 @@
 package graphgui;
 
 import graphgui.enums.GraphMode;
+import javafx.util.Pair;
 
 /**
  * State of the application.
@@ -10,7 +11,7 @@ public final class State {
   private static State state = null;
 
   protected State() {}
-
+  
   /**
    * Singleton of the state.
    */
@@ -43,6 +44,7 @@ public final class State {
   public void setSelectedVertex(Vertex selectedVertex) {
     this.selectedVertex = selectedVertex;
   }
+  
 
   public Edge getSelectedEdge() {
     return selectedEdge;

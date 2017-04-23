@@ -172,6 +172,7 @@
             promptText="Enter command"
             AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0"
             AnchorPane.leftAnchor="112.0" AnchorPane.rightAnchor="0.0"
+            onKeyPressed="#commandLineTyped"
           >
             <cursor>
               <Cursor fx:constant="CLOSED_HAND"/>
@@ -182,9 +183,10 @@
             AnchorPane.leftAnchor="0.0"
           />
         </AnchorPane>
-        <TextArea editable="false" prefHeight="80.0" prefWidth="200.0"
+        <TextArea fx:id="taConsole" editable="false" prefHeight="80.0" prefWidth="200.0"
           AnchorPane.bottomAnchor="55.0" AnchorPane.leftAnchor="0.0"
           AnchorPane.rightAnchor="0.0"
+          
         />
       </AnchorPane>
     </AnchorPane>

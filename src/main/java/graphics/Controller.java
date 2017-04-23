@@ -1,27 +1,33 @@
 package graphics;
 
 import graphgui.Edge;
+import graphgui.Graph;
+import graphgui.GraphAlgorithm;
 import graphgui.GraphPane;
 import graphgui.State;
 import graphgui.Vertex;
 import graphgui.enums.GraphMode;
 import graphgui.utils.GraphLoader;
 import java.io.File;
-import java.util.ArrayList;
+import java.util.Vector;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
-
+import javafx.scene.text.Text;
 
 public class Controller {
 
@@ -59,6 +65,8 @@ public class Controller {
   public MenuItem menuItemCloseProgram;
   public MenuItem menuItemLoad;
   public MenuItem menuItemSave;
+  @FXML
+  public TextArea taConsole;
 
   @FXML
   private void initialize() {
@@ -241,5 +249,48 @@ public class Controller {
     } catch (NumberFormatException e) {
       // TODO pridať správu o neplatnom vstupe do text area
     }
+  }
+  
+  @FXML
+  protected void commandLineTyped(KeyEvent event) {
+              
+    if (event.getCode() == KeyCode.ENTER) {
+      String command = tfCommandLine.getText();
+      this.tfCommandLine.clear();  
+      String[] tempTokens = command.split("\\s");
+      Vector<String> tokens = new Vector<String>();
+      for (String token : tempTokens) {
+        token.trim();
+        if (token.length() != 0) {
+          tokens.add(token);
+        }
+      }
+      this.gpGraph.executeCommand(tokens.toArray(new String[ tokens.size() ]));
+    }
+  }
+  
+  /**
+   * Spustí GraphAlgorithm() na graph od selectedVertex() a selectedEdge().
+   * Vráti jeho výsledok.
+   * @return String výsledok behu GraphAlgorithm()
+   */
+  public String runGraphAlgorithm() {
+    try {
+      GraphAlgorithm ga = new GraphAlgorithm(State.getState().getExtendedGraph(),
+                                               State.getState().getSelectedVertex(),
+                                               State.getState().getSelectedEdge());
+      String result = ga.performAlgorithm();
+      if (result != null) {
+        return result;
+      }
+    } catch (Exception e) {
+      return String.format("Vo funkcii v GraphAlgorithm bola chyba: %s", e.toString());    
+    }
+      
+    return "Result bol null";  
+  }
+  
+  public void appendTextArea(String text) {
+    this.taConsole.appendText(text);
   }
 }

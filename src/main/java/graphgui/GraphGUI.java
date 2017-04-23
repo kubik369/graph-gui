@@ -85,6 +85,9 @@ public class GraphGUI extends Application {
       listView.getSelectionModel().selectIndices(toSelect);
     }*/
   }
+  
+  
+  
 
   /**
    * Otvorenie súboru na načítanie a posunutie scannera grafu, aby sa načítal.
