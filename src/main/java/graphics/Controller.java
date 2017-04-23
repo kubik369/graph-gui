@@ -197,7 +197,7 @@ public class Controller {
       this.setDisableEdgeValueFields(true);
       return;
     }
-    
+
     Edge e = State.getState().getSelectedEdge();
     this.labelFromVertex.setText(Integer.toString(e.getOriginId()));
     this.labelToVertex.setText(Integer.toString(e.getDestinationId()));
