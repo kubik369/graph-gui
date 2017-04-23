@@ -66,6 +66,10 @@ public final class State {
     return this.vertexId++;
   }
 
+  public void setVertexId(int newVertexId) {
+    this.vertexId = newVertexId;
+  }
+  
   public boolean isAddingEdge() {
     return addingEdge;
   }

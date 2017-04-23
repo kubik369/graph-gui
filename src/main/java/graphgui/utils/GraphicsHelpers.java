@@ -37,6 +37,7 @@ public class GraphicsHelpers {
     text.setX(
         bounds.getX() + bounds.getWidth() / 2 - text.getLayoutBounds().getWidth() / 2);
     text.setY(bounds.getY() + bounds.getHeight() / 2);
+    
     return text;
   }
 }

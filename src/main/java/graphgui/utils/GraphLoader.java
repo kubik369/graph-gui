@@ -18,8 +18,9 @@ public class GraphLoader {
    * Ulozi graf do suboru.
    * @param graph graf krory sa ma ulozit
    * @param file subor do ktoreho sa ma graf ulozit
+   * @return true ak sa graf uspesne ulozil, inak false
    */
-  public static void saveGraph(Graph graph, File file) {
+  public static boolean saveGraph(Graph graph, File file) {
     try (BufferedWriter out = new BufferedWriter(new FileWriter(file))) {
       boolean showColors = true;
       out.write(String.format("S farbami: %b\n", showColors));
@@ -67,20 +68,24 @@ public class GraphLoader {
       }
     } catch (IOException e) {
       e.printStackTrace();
+      return false;
     }
+    return true;
   }
 
   /**
    * Nacita graf zo suboru.
    * @param f subor do ktoreho sa ma graf ulozit
+   * @return true ak sa graf uspesne nacital, inak false
    */
-  public static void loadGraph(File f) {
+  public static boolean loadGraph(File f) {
     try (Scanner in = new Scanner(new BufferedReader(new FileReader(f)))) {
-      // reader ignoruje vsetky riadky pokial az po tento
+      // reader ignoruje vsetky riadky az po tento
       while (!in.nextLine().equals("VSTUP PRE PROGRAM"));
 
       ExtendedGraph graph = State.getState().getExtendedGraph();
       graph.clear();
+      State.getState().setVertexId(0);
       final int numOfVertices = in.nextInt();
       final int numOfEdges = in.nextInt();
       for (int i = 0; i < numOfVertices; i++) {
@@ -107,6 +112,8 @@ public class GraphLoader {
       }
     } catch (IOException e) {
       e.printStackTrace();
+      return false;
     }
+    return true;
   }
 }
