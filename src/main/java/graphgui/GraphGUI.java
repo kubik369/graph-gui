@@ -86,9 +86,6 @@ public class GraphGUI extends Application {
     }*/
   }
   
-  
-  
-
   /**
    * Otvorenie súboru na načítanie a posunutie scannera grafu, aby sa načítal.
    * @param sf názov vstupného súboru

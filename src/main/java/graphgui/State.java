@@ -11,7 +11,7 @@ public final class State {
   private static State state = null;
 
   protected State() {}
-  
+
   /**
    * Singleton of the state.
    */

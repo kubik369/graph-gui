@@ -8,7 +8,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Shape;
 
-
 /**
  * Trieda pre graf rozšírený o niektoré grafické prvky. Pre každú
  * hranu a vrchol si pamätá ich Shape (Circle, Line). Okrem toho si
@@ -54,7 +53,6 @@ public class ExtendedGraph extends GraphImplementation {
   private ArrayList<GraphObserver> observers;
   private HashMap<Vertex, Circle> vertexShapes;
   private HashMap<Edge, Line> edgeShapes;
-
 
   /**
    * Konštruktor.
@@ -309,7 +307,4 @@ public class ExtendedGraph extends GraphImplementation {
       return true;
     }
   }
-
- 
-  
 }

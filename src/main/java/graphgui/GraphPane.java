@@ -243,6 +243,7 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
   @Override
   public void vertexChanged(Vertex vertex) {
   }
+  
   /**
    * Vráti Shape čiary reprezentujúcej novú hranu.
    * @return Shape editovacej hrany
@@ -271,7 +272,6 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
    * @return Pair vhodné súradnice na zobrazenie vrcholu
    */
   public Pair nextVertexCoordinates() {
-    
     if (this.nextVertexX == -1) {
       return new Pair(10.0, 10.0);
     }
@@ -298,7 +298,7 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
    * @param tokens jeden príkaz reprezentovaný poľom Stringov.
    */
   public void executeCommand(String[] tokens) {
-    //Prázdny príkaz je pravdepodobne len omylom stlačený enter - ignorujeme takýto pokus.
+    // Prázdny príkaz je pravdepodobne len omylom stlačený enter - ignorujeme takýto pokus.
     if (tokens.length == 0) {
       return;
     }
@@ -310,7 +310,6 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
 
     switch (tokens[0]) {
       case "save": {
-
         if (tokens.length != 2) {
           this.controller.appendTextArea("Nespravny pocet parametrov pre save\n");
           break;
@@ -328,7 +327,6 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
         break;
       }
       case "load": {
-
         if (tokens.length != 2) {
           this.controller.appendTextArea("Nespravny pocet parametrov pre load\n");
           break;
@@ -346,7 +344,6 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
         break;
       }
       case "add": {
-
         if (tokens.length < 2) {
           this.controller.appendTextArea("Nespravny pocet parametrov pre add\n");
           break;
@@ -354,8 +351,7 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
 
         switch (tokens[1]) {
           case "edge": {
-
-            if (tokens.length < 4) {
+            if (tokens.length != 4) {
               this.controller.appendTextArea("Nespravny pocet parametrov pre add edge\n");
               break;
             }
@@ -364,15 +360,12 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
             try {
               from = Integer.parseInt(tokens[2]);
               to = Integer.parseInt(tokens[3]);
+              this.graph.addEdge(from, to);
             } catch (NumberFormatException e) {
               this.controller.appendTextArea(
                   "Parametre pre add edge maju nespravny format - ocakavaju sa dve cele cisla\n"
               );
               break;
-            }
-
-            try {
-              this.graph.addEdge(from, to);
             } catch (IllegalArgumentException e) {
               this.controller.appendTextArea(String.format("%s\n", e.toString()));
               break;
@@ -386,7 +379,6 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
             break;
           }
           case "vertex": {
-
             if (tokens.length == 2) { 
               //niesu pritomne suradnice, vygeneruje sa podla nextVertexCoordinates()
               Pair coordinates = nextVertexCoordinates();
@@ -477,15 +469,12 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
             try {
               from = Integer.parseInt(tokens[2]);
               to = Integer.parseInt(tokens[3]);
+              this.graph.removeEdge(from, to);
             } catch (NumberFormatException e) {
               this.controller.appendTextArea(
                   "Parametre pre remove edge maju nespravny format - ocakavaju sa dve cele cisla\n"
               );
               break;
-            }
-
-            try {
-              this.graph.removeEdge(from, to);
             } catch (IllegalArgumentException e) {
               this.controller.appendTextArea(String.format("%s\n", e.toString()));
               break;
@@ -500,7 +489,6 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
             break;
           }
           case "vertex": {
-
             if (tokens.length != 3) {
               this.controller.appendTextArea(
                   String.format("delete vertex ocakava 1 parameter, nasiel %d\n", tokens.length - 2)
@@ -545,7 +533,7 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
       case "move": {
         if (tokens.length != 4) {
           this.controller.appendTextArea(
-              "move vyzaduje parametre int vertexId double newX double newY\n"
+              "move vyzaduje parametre (int)vertexId (double)newX (double)newY\n"
           );
           break;
         }
@@ -583,6 +571,7 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
         break;
       }
       case "deselect": {
+        // TODO
         break;
       }
       case "run": {
