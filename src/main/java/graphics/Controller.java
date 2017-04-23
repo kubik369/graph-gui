@@ -9,6 +9,7 @@ import graphgui.enums.GraphMode;
 import graphgui.utils.GraphLoader;
 import java.io.File;
 import java.util.Vector;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -94,6 +95,9 @@ public class Controller {
         KeyCode.Q,
         KeyCombination.CONTROL_DOWN
     ));
+    Platform.runLater(() -> {
+      this.tfCommandLine.requestFocus();
+    });
   }
 
   @FXML
@@ -260,13 +264,12 @@ public class Controller {
       // TODO pridať správu o neplatnom vstupe do text area
     }
   }
-  
+
   @FXML
   protected void commandLineTyped(KeyEvent event) {
-              
     if (event.getCode() == KeyCode.ENTER) {
       String command = tfCommandLine.getText();
-      this.tfCommandLine.clear();  
+      this.tfCommandLine.clear();
       String[] tempTokens = command.split("\\s");
       Vector<String> tokens = new Vector<String>();
       for (String token : tempTokens) {
@@ -278,7 +281,7 @@ public class Controller {
       this.gpGraph.executeCommand(tokens.toArray(new String[ tokens.size() ]));
     }
   }
-  
+
   /**
    * Spustí GraphAlgorithm() na graph od selectedVertex() a selectedEdge().
    * Vráti jeho výsledok.
@@ -294,12 +297,12 @@ public class Controller {
         return result;
       }
     } catch (Exception e) {
-      return String.format("Vo funkcii v GraphAlgorithm bola chyba: %s", e.toString());    
+      return String.format("Vo funkcii v GraphAlgorithm bola chyba: %s", e.toString());
     }
-      
-    return "Result bol null";  
+
+    return "Result bol null";
   }
-  
+
   public void appendTextArea(String text) {
     this.taConsole.appendText(text);
   }
