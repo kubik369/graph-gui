@@ -201,6 +201,7 @@ public class ExtendedGraph extends GraphImplementation {
       deselectEdge();
       Vertex old = State.getState().getSelectedVertex();
       State.getState().setSelectedVertex(null);
+      State.getState().setAddingEdge(false);
       updateVertexShape(old);
       for (GraphObserver o : observers) {
         o.vertexDeselected(old);

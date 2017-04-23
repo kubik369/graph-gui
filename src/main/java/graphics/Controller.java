@@ -69,12 +69,12 @@ public class Controller {
     this.tfEdgeValue.setDisable(true);
     this.cbVertexColor.setDisable(true);
     this.cbVertexColor.getItems().addAll(
-        "white", "green", "orange", "blue", "yellow"
+        "black", "white", "green", "orange", "blue", "yellow"
     );
 
     this.cbEdgeColor.setDisable(true);
     this.cbEdgeColor.getItems().addAll(
-        "white", "green", "orange", "blue", "yellow"
+        "black", "white", "green", "orange", "blue", "yellow"
     );
   }
 
@@ -98,6 +98,7 @@ public class Controller {
     State state = State.getState();
     state.setSelectedEdge(null);
     state.setSelectedVertex(null);
+    state.setAddingEdge(false);
     if (source == this.btnView) {
       state.setMode(GraphMode.VIEW);
     } else if (source == this.btnEditGraph) {
@@ -196,7 +197,7 @@ public class Controller {
       this.setDisableEdgeValueFields(true);
       return;
     }
-    
+
     Edge e = State.getState().getSelectedEdge();
     this.labelFromVertex.setText(Integer.toString(e.getOriginId()));
     this.labelToVertex.setText(Integer.toString(e.getDestinationId()));

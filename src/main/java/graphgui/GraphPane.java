@@ -100,6 +100,7 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
         this.graph.toggleVertexSelection(vertex);
       }
     });
+    circle.setCursor(Cursor.HAND);
     circle.setOnMouseMoved((MouseEvent event) -> {
       // FIXME Find out what needs to be done here
       //gui.setInfoLabelText("Vertex " + vertex.toString());
