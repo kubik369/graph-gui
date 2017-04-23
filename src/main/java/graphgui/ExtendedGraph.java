@@ -19,10 +19,10 @@ import javafx.scene.shape.Shape;
  */
 public class ExtendedGraph extends GraphImplementation {
 
-  private static final Color defaultBorderCol = Color.BLACK;
-  private static final Color highlightBorderCol = Color.RED;
-  private static final Color defaultEdgeColor = Color.BLACK;
-  private static final Color highlightEdgeColor = Color.RED;
+  private static final String DEFAULT_BORDER_COLOR = "black";
+  private static final String HIGHLIGHT_BORDER_COLOR = "red";
+  private static final String DEFAULT_EDGE_COLOR = "black";
+  private static final String HIGHLIGHT_EDGE_COLOR = "red";
 
   /**
    * Pomocné rozhranie, určené pre triedy, ktoré chcú byť upovedomené o
@@ -100,6 +100,7 @@ public class ExtendedGraph extends GraphImplementation {
     EdgeImplementation e = super.addEdge(v1, v2);
     edgeShapes.put(e, new Line());
     updateEdgeShape(e);
+    State.getState().setAddingEdge(false);
     for (GraphObserver o : observers) {
       o.edgeAdded(e);
     }
@@ -146,9 +147,9 @@ public class ExtendedGraph extends GraphImplementation {
     r.setRadius(v.getSize());
     r.setFill(Color.web(v.getColorName()));
     if (v == State.getState().getSelectedVertex()) {
-      r.setStroke(highlightBorderCol);
+      r.setStyle("-fx-stroke:" + HIGHLIGHT_BORDER_COLOR);
     } else {
-      r.setStroke(defaultBorderCol);
+      r.setStyle("-fx-stroke:" + DEFAULT_BORDER_COLOR);
     }
   }
 
@@ -161,10 +162,11 @@ public class ExtendedGraph extends GraphImplementation {
     l.setStartY(e.getOrigin().getY() + offset1);
     l.setEndX(e.getDestination().getX() + offset2);
     l.setEndY(e.getDestination().getY() + offset2);
+
     if (e.isEquivalent(State.getState().getSelectedEdge())) {
-      l.setStroke(highlightEdgeColor);
+      l.setStyle("-fx-stroke:" + HIGHLIGHT_EDGE_COLOR);
     } else {
-      l.setStroke(defaultEdgeColor);
+      l.setStyle("-fx-stroke:" + e.getColorName());
     }
   }
 
@@ -236,7 +238,7 @@ public class ExtendedGraph extends GraphImplementation {
     if (e == null) {
       throw new NullPointerException("Selecting null edge");
     }
-    if (e != State.getState().getSelectedVertex()) {
+    if (e != State.getState().getSelectedEdge()) {
       deselectEdge();
       State.getState().setSelectedEdge(e);
       updateEdgeShape(e);
@@ -280,11 +282,13 @@ public class ExtendedGraph extends GraphImplementation {
    * Označí vrchol pokiaľ nie je vybratý, odznačí ho pokiaľ je.
    * @param vertex Vrchol na ktorom vykonať operáciu.
    */
-  public void toggleVertexSelection(Vertex vertex) {
+  public boolean toggleVertexSelection(Vertex vertex) {
     if (vertex == State.getState().getSelectedVertex()) {
       deselectVertex();
+      return false;
     } else {
       selectVertex(vertex);
+      return true;
     }
   }
 
@@ -292,11 +296,13 @@ public class ExtendedGraph extends GraphImplementation {
    * Označí hranu pokiaľ nie je vybratá, odznačí ju pokiaľ je.
    * @param edge Hrana na ktorej vykonať operáciu.
    */
-  public void toggleEdgeSelection(Edge edge) {
+  public boolean toggleEdgeSelection(Edge edge) {
     if (edge == State.getState().getSelectedEdge()) {
       deselectEdge();
+      return false;
     } else {
       selectEdge(edge);
+      return true;
     }
   }
 }

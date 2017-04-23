@@ -1,10 +1,14 @@
 package graphics;
 
+import graphgui.Edge;
 import graphgui.GraphPane;
 import graphgui.State;
+import graphgui.Vertex;
 import graphgui.enums.GraphMode;
 import graphgui.utils.GraphLoader;
 import java.io.File;
+import java.util.ArrayList;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -41,9 +45,12 @@ public class Controller {
   public Label labelVertex;
   public Label labelVertexNumber;
   public TextField tfVertexValue;
-  public Label labelVertexColorClickable;
-  public ComboBox cbFromVertex;
-  public ComboBox cbToVertex;
+  public ComboBox cbVertexColor;
+  public ComboBox cbEdgeColor;
+  @FXML
+  public Label labelFromVertex;
+  @FXML
+  public Label labelToVertex;
   public TextField tfEdgeValue;
   public Label labelEdgeColorClickable;
   public MenuBar menuBar;
@@ -61,17 +68,31 @@ public class Controller {
     this.btnChangeEdgeValues.setDisable(true);
     this.tfVertexValue.setDisable(true);
     this.tfEdgeValue.setDisable(true);
-    this.cbFromVertex.setDisable(true);
-    this.cbToVertex.setDisable(true);
+    this.cbVertexColor.setDisable(true);
+    this.cbVertexColor.getItems().addAll(
+        "white", "green", "orange", "blue", "yellow"
+    );
+
+    this.cbEdgeColor.setDisable(true);
+    this.cbEdgeColor.getItems().addAll(
+        "white", "green", "orange", "blue", "yellow"
+    );
   }
 
   @FXML
   protected void changeMode(ActionEvent event) {
+    // Zrušiť výber hrany a vrcholu v GraphPane
+    this.gpGraph.resetEdgeLine();
+    this.gpGraph.getGraph().deselectVertex();
+    this.gpGraph.getGraph().deselectEdge();
+
+    // Resetnúť všetky tlačidlá módov na ľavom paneli
     this.btnView.setStyle("-fx-background-color: darkkhaki;");
     this.btnEditGraph.setStyle("-fx-background-color: darkkhaki;");
     this.btnEditValues.setStyle("-fx-background-color: darkkhaki;");
     this.btnDelete.setStyle("-fx-background-color: darkkhaki;");
 
+    // Zvýrazniť tlačidlo novo vybratého módu
     Object source = event.getSource();
     ((Button)source).setStyle("-fx-background-color: yellow;");
 
@@ -91,6 +112,7 @@ public class Controller {
 
   /**
    * Ukonci program.
+   * @param actionEvent event
    */
   public void closeProgramHandler(ActionEvent actionEvent) {
     System.exit(0);
@@ -98,6 +120,7 @@ public class Controller {
 
   /**
    * Otvori dialog na ulozenie grafu.
+   * @param actionEvent event
    */
   public void saveGraphHandler(ActionEvent actionEvent) {
     FileChooser chooser = new FileChooser();
@@ -115,6 +138,7 @@ public class Controller {
 
   /**
    * Otvori dialog na nacitanie grafu.
+   * @param actionEvent event
    */
   public void loadGraphHandler(ActionEvent actionEvent) {
     FileChooser chooser = new FileChooser();
@@ -124,6 +148,102 @@ public class Controller {
     File file = chooser.showOpenDialog(null);
     if (file != null) {
       GraphLoader.loadGraph(file);
+    }
+  }
+
+  /**
+   * Zmení stav prvkov o vrchole v pravom paneli.
+   * @param b nový stav podaní .setDisable
+   */
+  @FXML
+  public void setDisableVertexValueFields(boolean b) {
+    this.btnChangeVertexValues.setDisable(b);
+    this.tfVertexValue.setDisable(b);
+    this.cbVertexColor.setDisable(b);
+  }
+
+  /**
+   * Zmení stav prvkov o hrane v pravom paneli.
+   * @param b nový stav podaní .setDisable
+   */
+  @FXML
+  public void setDisableEdgeValueFields(boolean b) {
+    this.btnChangeEdgeValues.setDisable(b);
+    this.tfEdgeValue.setDisable(b);
+    this.cbEdgeColor.setDisable(b);
+  }
+
+  /**
+   * Vyplní prvky o vrchole informáciami vybraného vrcholu.
+   */
+  public void fillVertexFields() {
+    if (State.getState().getSelectedVertex() == null) {
+      this.labelVertexNumber.setText("N/A");
+      this.tfVertexValue.setText("N/A");
+      this.setDisableVertexValueFields(true);
+      return;
+    }
+    Vertex v = State.getState().getSelectedVertex();
+    this.labelVertexNumber.setText(Integer.toString(v.getId()));
+    this.tfVertexValue.setText(Integer.toString(v.getValue()));
+    this.cbVertexColor.getSelectionModel().select(v.getColorName());
+  }
+
+  /**
+   * Vyplní prvky o hrane s informáciami o vybranej hrane.
+   */
+  public void fillEdgeFields() {
+    if (State.getState().getSelectedEdge() == null) {
+      this.setDisableEdgeValueFields(true);
+      return;
+    }
+
+    ArrayList vertices = new ArrayList();
+    for (int i = 0; i < State.getState().getExtendedGraph().getNumberOfVertices();i++) {
+      vertices.add(i);
+    }
+    Edge e = State.getState().getSelectedEdge();
+    this.labelFromVertex.setText(Integer.toString(e.getOriginId()));
+    this.labelToVertex.setText(Integer.toString(e.getDestinationId()));
+    this.cbEdgeColor.getSelectionModel().select(e.getColorName());
+    this.tfEdgeValue.setText(Integer.toString(e.getValue()));
+  }
+
+  /**
+   * Zoberie nové informácie o vrchole z pravého panelu a nastaví ich
+   * vybratému vrcholu.
+   */
+  @FXML
+  public void updateVertexValues() {
+    if (State.getState().getSelectedVertex() == null) {
+      return;
+    }
+    try {
+      Vertex v = State.getState().getSelectedVertex();
+      v.setValue(Integer.parseInt(this.tfVertexValue.getText().trim()));
+      v.setColorName((String)this.cbVertexColor.getSelectionModel().getSelectedItem());
+    } catch (NumberFormatException e) {
+      // TODO pridať správu o neplatnom vstupe do text area
+    }
+  }
+
+  /**
+   * Zoberie nové informácie o hrane z pravého panelu a nastaví ich
+   * vybratej hrane.
+   */
+  @FXML
+  public void updateEdgeValues() {
+    if (State.getState().getSelectedEdge() == null) {
+      return;
+    }
+    try {
+      Edge e = State.getState().getSelectedEdge();
+      e.setValue(Integer.parseInt(this.tfEdgeValue.getText().trim()));
+      System.out.println((String)this.cbEdgeColor.getSelectionModel().getSelectedItem());
+      e.setColorName((String)this.cbEdgeColor.getSelectionModel().getSelectedItem());
+      State.getState().getExtendedGraph().deselectEdge();
+    } catch (NumberFormatException e) {
+      // TODO pridať správu o neplatnom vstupe do text area
     }
   }
 }
