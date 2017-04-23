@@ -556,8 +556,14 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
         }
 
         try {
-          this.graph.getVertex(vertexId).setX(newX);
-          this.graph.getVertex(vertexId).setY(newY);
+          Vertex v = this.graph.getVertex(vertexId);
+          // text vo vrchole ma divne nastavene [x,y], preto pouzijeme diff pozicii
+          double dx = newX - v.getX();
+          double dy = newY - v.getY();
+          v.setX(v.getX() + dx);
+          v.setY(v.getY() + dy);
+          this.vertexTexts.get(v).setX(this.vertexTexts.get(v).getX() + dx);
+          this.vertexTexts.get(v).setY(this.vertexTexts.get(v).getY() + dy);
         } catch (IndexOutOfBoundsException e) {
           this.controller.appendTextArea(String.format("Neplatny vertexId %d\n", vertexId));
           break;

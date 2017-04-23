@@ -147,6 +147,7 @@ public class ExtendedGraph extends GraphImplementation {
     r.setCenterY(v.getY() + v.getSize() / 2);
     r.setRadius(v.getSize());
     r.setFill(Color.web(v.getColorName()));
+    r.setStrokeWidth(2);
     if (v == State.getState().getSelectedVertex()) {
       r.setStyle("-fx-stroke:" + HIGHLIGHT_BORDER_COLOR);
     } else {
