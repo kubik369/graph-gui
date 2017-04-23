@@ -75,10 +75,10 @@ public class GraphAlgorithm {
   // POMOCNÉ METÓDY A TRIEDY, MEŇTE A PRIDÁVAJTE PODĽA POTREBY
   // v ukážkovom príklade metóda search rekurzívne prehľadáva graf do hĺbky
   private void search(boolean[] visited, Vertex vertex) {
-    visited[vertex.getId()] = true;
+    visited[vertex.getIndex()] = true;
     for (Vertex neighbour : vertex.adjVertices()) {
-      if (!visited[neighbour.getId()]) {
-        visited[neighbour.getId()] = true;
+      if (!visited[neighbour.getIndex()]) {
+        visited[neighbour.getIndex()] = true;
         search(visited, neighbour);
       }
     }

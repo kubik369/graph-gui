@@ -1,16 +1,22 @@
 package graphgui;
 
 import graphgui.enums.GraphMode;
+import graphgui.utils.GraphicsHelpers;
 import graphics.Controller;
+import java.util.HashMap;
 import javafx.geometry.Insets;
+import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import javafx.scene.text.Text;
 
 /** Trieda pre grafický panel, na ktorom umiestňujeme nakreslenie grafu. */
 public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
@@ -18,12 +24,14 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
   private ExtendedGraph graph;
   private final Line edgeLine;
   private static final int EDGE_WIDTH = 4;
+  private HashMap<Vertex, Text> vertexTexts;
 
   /**
    * Inicializuje grafový panel.
    */
   public GraphPane() {
     this.edgeLine = new Line();
+    vertexTexts = new HashMap<>();
     this.setOnMouseMoved((MouseEvent e) -> {
       Vertex v = State.getState().getSelectedVertex();
       if (State.getState().getMode() == GraphMode.EDIT_GRAPH && v != null) {
@@ -65,9 +73,9 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
    */
   @Override
   public void vertexAdded(Vertex vertex) throws IllegalArgumentException {
-    Shape shape = graph.getVertexShape(vertex);
+    Circle circle = (Circle) graph.getVertexShape(vertex);
 
-    shape.setOnMouseClicked((MouseEvent event) -> {
+    circle.setOnMouseClicked((MouseEvent event) -> {
       State state = State.getState();
 
       if (state.getMode() == GraphMode.DELETE) {
@@ -87,12 +95,24 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
 
       event.consume();
     });
-    shape.setOnMouseMoved((MouseEvent event) -> {
+    circle.setOnMouseMoved((MouseEvent event) -> {
       // FIXME Find out what needs to be done here
       //gui.setInfoLabelText("Vertex " + vertex.toString());
       event.consume();
     });
-    this.getChildren().add(shape);
+    this.getChildren().add(circle);
+    Text text = GraphicsHelpers.createBoundedText(
+        String.valueOf(State.getState().nextVertexId()),
+        new Rectangle(
+            circle.getCenterX() - circle.getRadius() / 2,
+            circle.getCenterY() - circle.getRadius() / 2,
+            circle.getRadius(),
+            circle.getRadius()),
+        Color.BLACK);
+    vertexTexts.put(vertex, text);
+    text.setPickOnBounds(true);
+    text.setMouseTransparent(true);
+    this.getChildren().add(text);
   }
 
   /**
@@ -114,7 +134,9 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
           this.graph.removeEdge(edge);
         }
       });
+      s.setCursor(Cursor.HAND);
       this.getChildren().add(s);
+      s.toBack();
     } catch (Exception ex) {
       throw new IllegalArgumentException("edgeAdded");
     }
@@ -129,6 +151,7 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
   public void vertexRemoved(Vertex vertex) throws IllegalArgumentException {
     try {
       this.getChildren().remove(graph.getVertexShape(vertex));
+      this.getChildren().remove(vertexTexts.get(vertex));
     } catch (Exception ex) {
       System.err.println("vertexRemoved");
       throw new IllegalArgumentException();

@@ -33,7 +33,7 @@ public final class EdgeImplementation implements Edge {
 
   @Override
   public int getOriginId() {
-    return getOrigin().getId();
+    return getOrigin().getIndex();
   }
 
   @Override
@@ -43,7 +43,7 @@ public final class EdgeImplementation implements Edge {
 
   @Override
   public int getDestinationId() {
-    return getDestination().getId();
+    return getDestination().getIndex();
   }
 
   @Override

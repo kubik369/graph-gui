@@ -4,13 +4,13 @@ import graphgui.enums.GraphMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 
 /**
  * Trieda pre graf rozšírený o niektoré grafické prvky. Pre každú
- * hranu a vrchol si pamätá ich Shape (Rectangle, Line). Okrem toho si
+ * hranu a vrchol si pamätá ich Shape (Circle, Line). Okrem toho si
  * pamätá, ktorý vrchol a hrana boli zvoleneé (selected). Pri zmene
  * grafu alebo zvolených prvkov upozorní zaregistrovaných
  * pozorovateľov, aby si aktualizovali zobrazenie grafu.  Túto triedu
@@ -51,16 +51,16 @@ public class ExtendedGraph extends GraphImplementation {
   }
 
   private ArrayList<GraphObserver> observers;
-  private HashMap<Vertex, Rectangle> vertexShapes;
+  private HashMap<Vertex, Circle> vertexShapes;
   private HashMap<Edge, Line> edgeShapes;
 
   /**
    * Konštruktor.
    */
   public ExtendedGraph() {
-    observers = new ArrayList<GraphObserver>();
-    vertexShapes = new HashMap<Vertex, Rectangle>();
-    edgeShapes = new HashMap<Edge, Line>();
+    observers = new ArrayList<>();
+    vertexShapes = new HashMap<>();
+    edgeShapes = new HashMap<>();
     State.getState().setExtendedGraph(this);
   }
 
@@ -75,7 +75,7 @@ public class ExtendedGraph extends GraphImplementation {
   @Override
   public VertexImplementation addVertex(double x, double y) {
     VertexImplementation v = super.addVertex(x, y);
-    vertexShapes.put(v, new Rectangle());
+    vertexShapes.put(v, new Circle());
     updateVertexShape(v);
     for (GraphObserver o : observers) {
       o.vertexAdded(v);
@@ -140,11 +140,10 @@ public class ExtendedGraph extends GraphImplementation {
   }
 
   private void updateVertexShape(Vertex v) {
-    Rectangle r = vertexShapes.get(v);
-    r.setX(v.getX());
-    r.setY(v.getY());
-    r.setWidth(v.getSize());
-    r.setHeight(v.getSize());
+    Circle r = vertexShapes.get(v);
+    r.setCenterX(v.getX() + v.getSize() / 2);
+    r.setCenterY(v.getY() + v.getSize() / 2);
+    r.setRadius(v.getSize());
     r.setFill(Color.web(v.getColorName()));
     if (v == State.getState().getSelectedVertex()) {
       r.setStroke(highlightBorderCol);
