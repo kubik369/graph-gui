@@ -108,19 +108,19 @@ public class GraphImplementation implements Graph {
 
   @Override
   public Edge addEdge(int n1, int n2) throws IndexOutOfBoundsException, IllegalArgumentException {
-      Vertex from = null, to = null;
-      for (Vertex v : this.vertices) {
-        if (v.getIndex() == n1) {
-          from = v;
-        } else if (v.getIndex() == n2) {
-          to = v;
-        }
+    Vertex from = null, to = null;
+    for (Vertex v : this.vertices) {
+      if (v.getIndex() == n1) {
+        from = v;
+      } else if (v.getIndex() == n2) {
+        to = v;
       }
-      if (from == null || to == null) {
-        throw new IllegalArgumentException();
-      }
-      
-      return addEdge(from, to);
+    }
+    if (from == null || to == null) {
+      throw new IllegalArgumentException();
+    }
+
+    return addEdge(from, to);
   }
 
   @Override
