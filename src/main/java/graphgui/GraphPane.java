@@ -35,6 +35,7 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
     this.setOnMouseMoved((MouseEvent e) -> {
       Vertex v = State.getState().getSelectedVertex();
       if (State.getState().getMode() == GraphMode.EDIT_GRAPH && v != null) {
+        State.getState().setAddingEdge(true);
         this.edgeLine.setStartX(v.getX() + v.getSize() / 2);
         this.edgeLine.setStartY(v.getY() + v.getSize() / 2);
         this.edgeLine.setEndX(e.getX());
@@ -60,8 +61,13 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
     this.graph.addObserver(this);
 
     this.setOnMouseClicked((MouseEvent event) -> {
-      if (State.getState().getMode() == GraphMode.EDIT_GRAPH) {
+      if (State.getState().getMode() == GraphMode.EDIT_GRAPH
+          && !State.getState().isAddingEdge()) {
         this.graph.addVertex(event.getX(), event.getY());
+      } else if (State.getState().getMode() == GraphMode.EDIT_VALUES) {
+        this.controller.setDisableVertexValueFields(true);
+        this.graph.deselectEdge();
+        this.graph.deselectVertex();
       }
     });
   }
@@ -76,6 +82,7 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
     Circle circle = (Circle) graph.getVertexShape(vertex);
 
     circle.setOnMouseClicked((MouseEvent event) -> {
+      event.consume();
       State state = State.getState();
 
       if (state.getMode() == GraphMode.DELETE) {
@@ -89,12 +96,11 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
         } else {
           this.graph.toggleVertexSelection(vertex);
         }
-      } else if (state.getMode() == GraphMode.EDIT_VALUES) {
-        // TODO finish EDIT_VALUES mode
+      } else if (state.getMode() == GraphMode.EDIT_VALUES || state.getMode() == GraphMode.VIEW) {
+        this.graph.toggleVertexSelection(vertex);
       }
-
-      event.consume();
     });
+    circle.setCursor(Cursor.HAND);
     circle.setOnMouseMoved((MouseEvent event) -> {
       // FIXME Find out what needs to be done here
       //gui.setInfoLabelText("Vertex " + vertex.toString());
@@ -127,6 +133,7 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
       s.setStyle(String.format("-fx-stroke: %s;", edge.getColorName()));
       s.setStrokeWidth(this.EDGE_WIDTH);
       s.setOnMouseClicked((MouseEvent event) -> {
+        event.consume();
         GraphMode mode = State.getState().getMode();
         if (mode == GraphMode.EDIT_VALUES) {
           this.graph.toggleEdgeSelection(edge);
@@ -179,6 +186,8 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
   @Override
   public void edgeSelected(Edge edge) {
     System.out.println("Edge selected " + edge);
+    this.controller.setDisableEdgeValueFields(false);
+    this.controller.fillEdgeFields();
   }
 
   /**
@@ -187,6 +196,7 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
    */
   @Override
   public void edgeDeselected(Edge edge) {
+    this.controller.fillEdgeFields();
   }
 
   /**
@@ -196,6 +206,12 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
   @Override
   public void vertexSelected(Vertex vertex) {
     System.out.println("Vertex selected");
+    if (State.getState().getMode() == GraphMode.EDIT_VALUES) {
+      this.controller.setDisableVertexValueFields(false);
+      this.controller.fillVertexFields();
+    } else if (State.getState().getMode() == GraphMode.VIEW) {
+      this.controller.fillVertexFields();
+    }
   }
 
   /**
@@ -204,10 +220,8 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
    */
   @Override
   public void vertexDeselected(Vertex vertex) {
-    this.edgeLine.setStartX(0);
-    this.edgeLine.setStartY(0);
-    this.edgeLine.setEndX(0);
-    this.edgeLine.setEndY(0);
+    this.resetEdgeLine();
+    this.controller.fillVertexFields();
   }
 
   /**
@@ -224,5 +238,28 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
    */
   @Override
   public void vertexChanged(Vertex vertex) {
+  }
+
+  /**
+   * Vráti Shape čiary reprezentujúcej novú hranu.
+   * @return Shape editovacej hrany
+   */
+  public Line getEdgeLine() {
+    return edgeLine;
+  }
+
+  /**
+   * "Zmaže" Shape novej editovacej hrany posunutím do rohu
+   * a nastavením dĺžky na 0.
+   */
+  public void resetEdgeLine() {
+    this.edgeLine.setStartX(0);
+    this.edgeLine.setStartY(0);
+    this.edgeLine.setEndX(0);
+    this.edgeLine.setEndY(0);
+  }
+
+  public ExtendedGraph getGraph() {
+    return graph;
   }
 }

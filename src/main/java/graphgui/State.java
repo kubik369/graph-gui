@@ -26,6 +26,7 @@ public final class State {
   private Edge selectedEdge;
   private ExtendedGraph extendedGraph;
   private int vertexId;
+  private boolean addingEdge = false;
 
   public ExtendedGraph getExtendedGraph() {
     return extendedGraph;
@@ -61,5 +62,13 @@ public final class State {
 
   public int nextVertexId() {
     return this.vertexId++;
+  }
+
+  public boolean isAddingEdge() {
+    return addingEdge;
+  }
+
+  public void setAddingEdge(boolean addingEdge) {
+    this.addingEdge = addingEdge;
   }
 }

@@ -67,17 +67,16 @@
               AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
               AnchorPane.topAnchor="70.0"
             >
-              <Label fx:id="labelVertexColorClickable" prefHeight="40.0" prefWidth="40.0"
-                AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="45.0"
-                AnchorPane.topAnchor="0.0"
-              />
               <Label text="Color:"
                 AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0"
                 AnchorPane.leftAnchor="0.0"
               />
+              <ComboBox fx:id="cbVertexColor" AnchorPane.leftAnchor="50.0" />
             </AnchorPane>
             <AnchorPane AnchorPane.topAnchor="110.0">
-              <Button fx:id="btnChangeVertexValues" text="Set values" />
+              <Button fx:id="btnChangeVertexValues" text="Set values"
+                onAction="#updateVertexValues"
+              />
             </AnchorPane>
           </AnchorPane>
           <AnchorPane prefHeight="200.0" prefWidth="200.0"
@@ -96,7 +95,7 @@
                 AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
                 AnchorPane.topAnchor="0.0"
               />
-              <ComboBox fx:id="cbFromVertex" prefHeight="20.0" prefWidth="40.0"
+              <Label fx:id="labelFromVertex" minWidth="30.0" prefHeight="20.0" prefWidth="60.0"
                 AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0"
                 AnchorPane.leftAnchor="45.0"
               />
@@ -104,7 +103,7 @@
                 AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0"
                 AnchorPane.leftAnchor="100.0"
               />
-              <ComboBox fx:id="cbToVertex" minHeight="20.0" minWidth="20.0" prefHeight="20.0"
+              <Label fx:id="labelToVertex" minHeight="20.0" minWidth="20.0" prefHeight="20.0"
                 AnchorPane.bottomAnchor="0.0"
                 AnchorPane.leftAnchor="130.0" AnchorPane.topAnchor="0.0"
               />
@@ -117,12 +116,12 @@
             </AnchorPane>
             <AnchorPane AnchorPane.topAnchor="80.0">
               <Label alignment="CENTER" contentDisplay="CENTER" text="Color:" />
-              <Label fx:id="labelEdgeColorClickable" prefHeight="40.0" prefWidth="40.0"
-                AnchorPane.leftAnchor="45.0"
-              />
+              <ComboBox fx:id="cbEdgeColor" AnchorPane.leftAnchor="50.0" />
             </AnchorPane>
             <AnchorPane AnchorPane.topAnchor="110.0">
-              <Button fx:id="btnChangeEdgeValues" text="Set values" />
+              <Button fx:id="btnChangeEdgeValues" text="Set values"
+                onAction="#updateEdgeValues"
+              />
             </AnchorPane>
           </AnchorPane>
         </AnchorPane>
