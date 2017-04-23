@@ -241,7 +241,7 @@ public class Controller {
       v.setValue(Integer.parseInt(this.tfVertexValue.getText().trim()));
       v.setColorName((String)this.cbVertexColor.getSelectionModel().getSelectedItem());
     } catch (NumberFormatException e) {
-      // TODO pridať správu o neplatnom vstupe do text area
+      this.taConsole.appendText("Neplatný vstup!\n");
     }
   }
 
@@ -261,7 +261,7 @@ public class Controller {
       e.setColorName((String)this.cbEdgeColor.getSelectionModel().getSelectedItem());
       State.getState().getExtendedGraph().deselectEdge();
     } catch (NumberFormatException e) {
-      // TODO pridať správu o neplatnom vstupe do text area
+      this.taConsole.appendText("Neplatný vstup!\n");
     }
   }
 
