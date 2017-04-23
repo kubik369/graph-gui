@@ -60,6 +60,7 @@ public final class State {
     this.mode = m;
   }
 
+
   public int nextVertexId() {
     return this.vertexId++;
   }
