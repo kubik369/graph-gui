@@ -34,9 +34,9 @@ public class GraphicsHelpers {
     text.setScaleX(bounds.getWidth() / textBounds.getWidth());
     text.setScaleY(bounds.getHeight() / textBounds.getWidth());
     // mpocas skalovania sa menia "layout bounds"
-    text.setLayoutX(
+    text.setX(
         bounds.getX() + bounds.getWidth() / 2 - text.getLayoutBounds().getWidth() / 2);
-    text.setLayoutY(bounds.getY() + bounds.getHeight() / 2);
+    text.setY(bounds.getY() + bounds.getHeight() / 2);
     return text;
   }
 }
