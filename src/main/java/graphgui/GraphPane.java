@@ -324,7 +324,6 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
         }
 
         File file = new File(filename);
-
         if (GraphLoader.saveGraph(this.graph, file)) {
           this.controller.appendTextArea(String.format("Graf ulozeny v subore %s\n", tokens[1]));
         } else {
@@ -332,7 +331,6 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
               String.format("Graf sa nepodarilo ulozit v subore %s\n", tokens[1])
           );
         }
-
         break;
       }
       case "load": {
@@ -347,7 +345,6 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
         }
 
         File file = new File(filename);
-
         if (GraphLoader.loadGraph(file)) {
           this.controller.appendTextArea(String.format("Graf nacitany zo suboru %s\n", tokens[1]));
         } else {
@@ -355,7 +352,6 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
               String.format("Graf sa nepodarilo nacitat zo suboru %s\n", tokens[1])
           );
         }
-
         break;
       }
       case "add": {
