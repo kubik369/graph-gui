@@ -23,3 +23,6 @@ nbproject/
 out/
 graph-gui.iml
 intellij-java-google-style.xml
+
+# Graph files specific to our program
+*.graph

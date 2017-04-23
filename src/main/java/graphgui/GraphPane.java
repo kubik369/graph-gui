@@ -1,9 +1,12 @@
 package graphgui;
 
 import graphgui.enums.GraphMode;
+import graphgui.utils.GraphLoader;
 import graphgui.utils.GraphicsHelpers;
 import graphics.Controller;
+import java.io.File;
 import java.util.HashMap;
+import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
@@ -22,7 +25,7 @@ import javafx.util.Pair;
 /** Trieda pre grafický panel, na ktorom umiestňujeme nakreslenie grafu. */
 public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
   private static final int EDGE_WIDTH = 4;
-  
+
   private Controller controller;
   private ExtendedGraph graph;
   private final Line edgeLine;
@@ -243,7 +246,7 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
   @Override
   public void vertexChanged(Vertex vertex) {
   }
-  
+
   /**
    * Vráti Shape čiary reprezentujúcej novú hranu.
    * @return Shape editovacej hrany
@@ -266,7 +269,7 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
   public ExtendedGraph getGraph() {
     return graph;
   }
-  
+
   /** Vráti súradnice na zobrazenie ďalšieho vrcholu pre konzolový príkaz
    * 'add vertex' bez zadaných súradníc.
    * @return Pair vhodné súradnice na zobrazenie vrcholu
@@ -275,23 +278,23 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
     if (this.nextVertexX == -1) {
       return new Pair(10.0, 10.0);
     }
-      
+
     final Pair result = new Pair(this.nextVertexX, this.nextVertexY);
-      
+
     this.nextVertexX += 50;
-      
+
     if (this.nextVertexX >= this.getWidth() - 20) {
       this.nextVertexX = 20;
       this.nextVertexY += 50;
     }
-      
+
     if (this.nextVertexY >= this.getHeight() - 20) {
       this.nextVertexX = -1;
     }
-    
+
     return result;
   }
-  
+
   /**
    * Zoberie popis jedneho prikazu ako pole Stringov a vykoná daný príkaz,
    * a jeho výsledok vypíše na controller.taTextArea.
@@ -302,8 +305,8 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
     if (tokens.length == 0) {
       return;
     }
-      
-    //Skonvertujeme príkazy na malé písmená kvôli zjedno
+
+    //Skonvertujeme príkazy na malé písmená kvôli zjednoteniu
     for (int i = 0;i < tokens.length;i++) {
       tokens[i] = tokens[i].toLowerCase();
     }
@@ -315,15 +318,19 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
           break;
         }
 
-        //TODO: zavolat funkciu 'Save' ktora je v menu, nazov suboru = tokens[1]
-        if (true) { // ak sa podarilo
+        String filename = new String(tokens[1]);
+        if (filename.endsWith(".graph") == false) {
+          filename = new String(filename + ".graph");
+        }
+
+        File file = new File(filename);
+        if (GraphLoader.saveGraph(this.graph, file)) {
           this.controller.appendTextArea(String.format("Graf ulozeny v subore %s\n", tokens[1]));
         } else {
           this.controller.appendTextArea(
               String.format("Graf sa nepodarilo ulozit v subore %s\n", tokens[1])
           );
         }
-
         break;
       }
       case "load": {
@@ -332,15 +339,19 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
           break;
         }
 
-        //TODO: zavolat funkciu 'Load' ktora je v menu, nazov suboru = tokens[1]
-        if (true) { // ak sa podarilo
+        String filename = new String(tokens[1]);
+        if (filename.endsWith(".graph") == false) {
+          filename = new String(filename + ".graph");
+        }
+
+        File file = new File(filename);
+        if (GraphLoader.loadGraph(file)) {
           this.controller.appendTextArea(String.format("Graf nacitany zo suboru %s\n", tokens[1]));
         } else {
           this.controller.appendTextArea(
               String.format("Graf sa nepodarilo nacitat zo suboru %s\n", tokens[1])
           );
         }
-
         break;
       }
       case "add": {
@@ -379,7 +390,7 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
             break;
           }
           case "vertex": {
-            if (tokens.length == 2) { 
+            if (tokens.length == 2) {
               //niesu pritomne suradnice, vygeneruje sa podla nextVertexCoordinates()
               Pair coordinates = nextVertexCoordinates();
               double x = (double) coordinates.getKey();
@@ -387,7 +398,7 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
               this.graph.addVertex(x, y);
               this.controller.appendTextArea(
                   String.format(
-                      "Vrchol %d uspesne pridany na suradnice (%f,%f)\n", 
+                      "Vrchol %d uspesne pridany na suradnice (%f,%f)\n",
                       this.graph.getNumberOfVertices() - 1 , x, y
                   )
               );
@@ -423,7 +434,7 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
             this.graph.addVertex(x, y);
             this.controller.appendTextArea(
                 String.format(
-                    "Vrchol %d uspesne pridany na suradnice (%f,%f)\n", 
+                    "Vrchol %d uspesne pridany na suradnice (%f,%f)\n",
                     this.graph.getNumberOfVertices() - 1 , x, y
                 )
             );
@@ -433,7 +444,7 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
           default: {
             this.controller.appendTextArea(
                 String.format(
-                    "Druhy parameter add moze byt 'vertex' alebo 'edge', nie '%s'\n", 
+                    "Druhy parameter add moze byt 'vertex' alebo 'edge', nie '%s'\n",
                     tokens[1]
                 )
             );
@@ -448,7 +459,114 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
         break;
       }
       case "select": {
-        //TODO po mergi s edit vecami
+        if (tokens.length < 2) {
+          this.controller.appendTextArea("Nespravny pocet parametrov pre select\n");
+          break;
+        }
+
+        switch (tokens[1]) {
+          case "vertex": {
+            if (tokens.length != 3) {
+              this.controller.appendTextArea(
+                  "select vertex ocakava jediny parameter (int)vertexId"
+              );
+              break;
+            }
+            int vertexId = -1;
+            try {
+              vertexId = Integer.parseInt(tokens[2]);
+              Vertex chosenVertex = this.graph.getVertex(vertexId);
+              this.graph.selectVertex(chosenVertex);
+              this.controller.appendTextArea(
+                  String.format(
+                      "Vrchol %d (%f, %f) uspesne vybrany.\n",
+                      vertexId, chosenVertex.getX(), chosenVertex.getY()
+                  )
+              );
+              this.controller.appendTextArea(
+                  String.format(
+                      "Jeho hodnota je %d a jeho farba je %s\n",
+                      chosenVertex.getValue(), chosenVertex.getColorName()
+                  )
+              );
+            } catch (NumberFormatException e) {
+              this.controller.appendTextArea(
+                  String.format("select vertex ocakaval (int)vertexId, nasiel %s\n", tokens[2])
+              );
+              break;
+            } catch (IndexOutOfBoundsException e) {
+              this.controller.appendTextArea(
+                  String.format("Neplatne vertexId %d\n", vertexId)
+              );
+              break;
+            }
+            break;
+          }
+          case "edge": {
+            if (tokens.length != 4) {
+              this.controller.appendTextArea(
+                  "select edge vyzaduje presne dva parametre: (int)from (int)to\n"
+              );
+              break;
+            }
+
+            int from = -1;
+            int to = -1;
+
+            try {
+              from = Integer.parseInt(tokens[2]);
+              to = Integer.parseInt(tokens[3]);
+              Vertex originVertex = this.graph.getVertex(from);
+              Edge chosenEdge = null;
+              for (Edge adjEdge : originVertex.adjEdges()) {
+                if (adjEdge.getDestinationId() == to) {
+                  chosenEdge = adjEdge;
+                }
+              }
+
+              if (chosenEdge == null) {
+                throw new IllegalArgumentException(
+                    String.format("Hrana %d %d neexistuje\n", from, to)
+                );
+              }
+
+              this.graph.selectEdge(chosenEdge);
+              this.controller.appendTextArea(
+                  String.format("Hrana %d %d uspesne vybrana\n", from, to)
+              );
+              this.controller.appendTextArea(
+                  String.format(
+                      "Jej value je %d a jej farba je %s\n",
+                      chosenEdge.getValue(), chosenEdge.getColorName()
+                  )
+              );
+
+            } catch (NumberFormatException e) {
+              this.controller.appendTextArea(
+                  "Parametre pre remove edge maju nespravny format - ocakavaju sa dve cele cisla\n"
+              );
+              break;
+            } catch (IllegalArgumentException e) {
+              this.controller.appendTextArea(String.format("%s\n", e.toString()));
+              break;
+            } catch (IndexOutOfBoundsException e) {
+              this.controller.appendTextArea("Neplatny index vrcholu From alebo To\n");
+              break;
+            }
+
+            break;
+          }
+          default: {
+            this.controller.appendTextArea(
+                String.format(
+                    "Druhy parameter select ma byt bud 'vertex' alebo 'edge', nie %s\n",
+                    tokens[1]
+                )
+            );
+            break;
+          }
+        }
+
         break;
       }
       case "remove": {
@@ -463,7 +581,7 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
               this.controller.appendTextArea("Nespravny pocet parametrov pre remove edge\n");
               break;
             }
-              
+
             int from;
             int to;
             try {
@@ -482,10 +600,10 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
               this.controller.appendTextArea("Neplatny index vrcholu From alebo To\n");
               break;
             }
-              
+
             this.controller.appendTextArea(
                 String.format("Hrana from %d to %d uspesne odstranena\n", from, to)
-            );                      
+            );
             break;
           }
           case "vertex": {
@@ -570,27 +688,54 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
         }
         this.controller.appendTextArea(
             String.format(
-                "Vrchol %d uspesne presunuty na suradnice (%f, %f)\n", 
+                "Vrchol %d uspesne presunuty na suradnice (%f, %f)\n",
                 vertexId, newX, newY
             )
         );
         break;
       }
       case "deselect": {
-        // TODO
+        if (tokens.length != 2) {
+          this.controller.appendTextArea("Nespravny pocet parametrov pre deselect\n");
+          break;
+        }
+
+        switch (tokens[1]) {
+          case "edge": {
+            State.getState().getExtendedGraph().deselectEdge();
+            this.controller.appendTextArea("Vyber hrany bol zruseny\n");
+            break;
+          }
+          case "vertex": {
+            State.getState().getExtendedGraph().deselectVertex();
+            this.controller.appendTextArea("Vyber vrchola bol zruseny\n");
+            break;
+          }
+          default: {
+            this.controller.appendTextArea(
+                String.format(
+                    "Druhy parameter pre delete moze byt bud 'edge' alebo 'vertex', nie %s\n",
+                    tokens[1]
+                )
+            );
+            break;
+          }
+        }
+
         break;
       }
       case "run": {
         this.controller.appendTextArea(String.format("%s\n", this.controller.runGraphAlgorithm()));
         break;
       }
-      
+
       case "help": {
         //TODO: po dokonceni vsetkych prikazov pridat manual
         break;
       }
       case "exit": {
-        //TODO: zavolat Close z menu (v mojom branchi este nieje ten event handler)
+        this.controller.closeProgramHandler(new ActionEvent());
+        this.controller.appendTextArea("Exit failed\n");
         break;
       }
       default: {
@@ -598,6 +743,6 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
             String.format("Neznamy prikaz '%s'; skus prikaz 'help'\n", tokens[0])
         );
       }
-    }  
+    }
   }
 }
