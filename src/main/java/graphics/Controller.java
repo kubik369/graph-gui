@@ -8,7 +8,6 @@ import graphgui.enums.GraphMode;
 import graphgui.utils.GraphLoader;
 import java.io.File;
 import java.util.ArrayList;
-import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -184,7 +183,7 @@ public class Controller {
       return;
     }
     Vertex v = State.getState().getSelectedVertex();
-    this.labelVertexNumber.setText(Integer.toString(v.getId()));
+    this.labelVertexNumber.setText(Integer.toString(v.getIndex()));
     this.tfVertexValue.setText(Integer.toString(v.getValue()));
     this.cbVertexColor.getSelectionModel().select(v.getColorName());
   }
@@ -197,11 +196,7 @@ public class Controller {
       this.setDisableEdgeValueFields(true);
       return;
     }
-
-    ArrayList vertices = new ArrayList();
-    for (int i = 0; i < State.getState().getExtendedGraph().getNumberOfVertices();i++) {
-      vertices.add(i);
-    }
+    
     Edge e = State.getState().getSelectedEdge();
     this.labelFromVertex.setText(Integer.toString(e.getOriginId()));
     this.labelToVertex.setText(Integer.toString(e.getDestinationId()));
