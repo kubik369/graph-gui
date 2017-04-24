@@ -48,14 +48,14 @@ public class Controller {
   public BorderPane root;
   public AnchorPane apMain;
   public Label labelVertex;
-  public Label labelVertexNumber;
+  public TextField tfVertexNumber;
   public TextField tfVertexValue;
   public ComboBox cbVertexColor;
   public ComboBox cbEdgeColor;
   @FXML
-  public Label labelFromVertex;
+  public TextField tfFromVertex;
   @FXML
-  public Label labelToVertex;
+  public TextField tfToVertex;
   public TextField tfEdgeValue;
   public MenuBar menuBar;
   public Menu menuFile;
@@ -200,13 +200,13 @@ public class Controller {
    */
   public void fillVertexFields() {
     if (State.getState().getSelectedVertex() == null) {
-      this.labelVertexNumber.setText("N/A");
+      this.tfVertexNumber.setText("N/A");
       this.tfVertexValue.setText("N/A");
       this.setDisableVertexValueFields(true);
       return;
     }
     Vertex v = State.getState().getSelectedVertex();
-    this.labelVertexNumber.setText(Integer.toString(v.getIndex()));
+    this.tfVertexNumber.setText(Integer.toString(v.getIndex()));
     this.tfVertexValue.setText(Integer.toString(v.getValue()));
     this.cbVertexColor.getSelectionModel().select(v.getColorName());
   }
@@ -221,8 +221,8 @@ public class Controller {
     }
 
     Edge e = State.getState().getSelectedEdge();
-    this.labelFromVertex.setText(Integer.toString(e.getOriginId()));
-    this.labelToVertex.setText(Integer.toString(e.getDestinationId()));
+    this.tfFromVertex.setText(Integer.toString(e.getOriginId()));
+    this.tfToVertex.setText(Integer.toString(e.getDestinationId()));
     this.cbEdgeColor.getSelectionModel().select(e.getColorName());
     this.tfEdgeValue.setText(Integer.toString(e.getValue()));
   }

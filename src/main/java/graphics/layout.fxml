@@ -19,9 +19,12 @@
   <top>
     <MenuBar fx:id="menuBar" BorderPane.alignment="CENTER">
       <Menu fx:id="menuFile" mnemonicParsing="false" text="File">
-        <MenuItem fx:id="menuItemSave" mnemonicParsing="false" text="Save graph" onAction="#saveGraphHandler"/>
-        <MenuItem fx:id="menuItemLoad" mnemonicParsing="false" text="Open graph" onAction="#loadGraphHandler"/>
-        <MenuItem fx:id="menuItemCloseProgram" mnemonicParsing="false" text="Close" onAction="#closeProgramHandler"/>
+        <MenuItem fx:id="menuItemSave" mnemonicParsing="false" text="Save graph"
+          onAction="#saveGraphHandler"/>
+        <MenuItem fx:id="menuItemLoad" mnemonicParsing="false" text="Open graph"
+          onAction="#loadGraphHandler"/>
+        <MenuItem fx:id="menuItemCloseProgram" mnemonicParsing="false" text="Close"
+          onAction="#closeProgramHandler"/>
       </Menu>
       <Menu fx:id="menuEdit" mnemonicParsing="false" text="Edit">
         <MenuItem mnemonicParsing="false" text="asdf"/>
@@ -54,75 +57,83 @@
               AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
               AnchorPane.topAnchor="20.0"
             >
-              <Label fx:id="labelVertexNumber" text="&lt;number&gt;" AnchorPane.leftAnchor="40.0" />
-              <Label text="Num:" />
+              <TextField fx:id="tfVertexNumber" AnchorPane.leftAnchor="65.0"
+                AnchorPane.rightAnchor="0.0" disable="true"/>
+              <Label text="Cislo:" AnchorPane.leftAnchor="0.0" AnchorPane.bottomAnchor="5.0"/>
             </AnchorPane>
-            <AnchorPane AnchorPane.topAnchor="40.0">
-              <Label text="Value:" AnchorPane.topAnchor="5.0" AnchorPane.leftAnchor="0.0" />
-              <TextField fx:id="tfVertexValue" prefHeight="25.0" prefWidth="100.0"
-                AnchorPane.leftAnchor="45.0" AnchorPane.topAnchor="0.0"
+            <AnchorPane AnchorPane.topAnchor="50.0" AnchorPane.rightAnchor="0"
+              AnchorPane.leftAnchor="0">
+              <Label text="Hodnota:" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="0.0"
+                AnchorPane.rightAnchor="0"/>
+              <TextField fx:id="tfVertexValue"
+                AnchorPane.leftAnchor="65.0" AnchorPane.topAnchor="0.0" AnchorPane.rightAnchor="0"
               />
             </AnchorPane>
             <AnchorPane
               AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-              AnchorPane.topAnchor="70.0"
+              AnchorPane.topAnchor="80.0"
             >
-              <Label text="Color:"
-                AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0"
+              <Label text="Farba:"
+                AnchorPane.bottomAnchor="5.0" AnchorPane.topAnchor="0.0"
                 AnchorPane.leftAnchor="0.0"
               />
-              <ComboBox fx:id="cbVertexColor" AnchorPane.leftAnchor="50.0" />
+              <ComboBox fx:id="cbVertexColor" AnchorPane.leftAnchor="65.0"
+                AnchorPane.rightAnchor="0"/>
             </AnchorPane>
-            <AnchorPane AnchorPane.topAnchor="110.0">
-              <Button fx:id="btnChangeVertexValues" text="Set values"
-                onAction="#updateVertexValues"
-              />
-            </AnchorPane>
+            <Button fx:id="btnChangeVertexValues" text="Set values"
+              onAction="#updateVertexValues" AnchorPane.topAnchor="110.0" AnchorPane.leftAnchor="0"
+              AnchorPane.rightAnchor="0"
+            />
           </AnchorPane>
           <AnchorPane prefHeight="200.0" prefWidth="200.0"
             AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-            AnchorPane.topAnchor="150.0"
+            AnchorPane.topAnchor="170.0"
           >
             <Label alignment="CENTER" text="Edge"
               AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
               AnchorPane.topAnchor="0.0"
             />
-            <AnchorPane
-              AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-              AnchorPane.topAnchor="20.0"
-            >
-              <Label text="From"
-                AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-                AnchorPane.topAnchor="0.0"
-              />
-              <Label fx:id="labelFromVertex" minWidth="30.0" prefHeight="20.0" prefWidth="60.0"
-                AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0"
-                AnchorPane.leftAnchor="45.0"
-              />
-              <Label text="to"
-                AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0"
-                AnchorPane.leftAnchor="100.0"
-              />
-              <Label fx:id="labelToVertex" minHeight="20.0" minWidth="20.0" prefHeight="20.0"
-                AnchorPane.bottomAnchor="0.0"
-                AnchorPane.leftAnchor="130.0" AnchorPane.topAnchor="0.0"
-              />
-            </AnchorPane>
-            <AnchorPane AnchorPane.topAnchor="50.0">
-              <TextField fx:id="tfEdgeValue" prefWidth="100.0"
-                AnchorPane.leftAnchor="45.0"
-              />
-              <Label alignment="CENTER" contentDisplay="CENTER" text="Value:" />
-            </AnchorPane>
-            <AnchorPane AnchorPane.topAnchor="80.0">
-              <Label alignment="CENTER" contentDisplay="CENTER" text="Color:" />
-              <ComboBox fx:id="cbEdgeColor" AnchorPane.leftAnchor="50.0" />
-            </AnchorPane>
-            <AnchorPane AnchorPane.topAnchor="110.0">
-              <Button fx:id="btnChangeEdgeValues" text="Set values"
-                onAction="#updateEdgeValues"
-              />
-            </AnchorPane>
+            <Label text="Z:"
+              AnchorPane.leftAnchor="0.0"
+              AnchorPane.topAnchor="35.0"
+            />
+            <TextField fx:id="tfFromVertex"
+              AnchorPane.topAnchor="30.0"
+              AnchorPane.leftAnchor="65.0"
+              AnchorPane.rightAnchor="0.0"
+              disable="true"
+            />
+            <Label text="Do:"
+              AnchorPane.topAnchor="65.0"
+              AnchorPane.leftAnchor="0.0"
+            />
+            <TextField fx:id="tfToVertex"
+              AnchorPane.topAnchor="60.0"
+              AnchorPane.leftAnchor="65.0"
+              AnchorPane.rightAnchor="0.0"
+              disable="true"
+            />
+            <Label alignment="CENTER" contentDisplay="CENTER" text="Hodnota:"
+              AnchorPane.topAnchor="95.0"
+              AnchorPane.leftAnchor="0"
+            />
+            <TextField fx:id="tfEdgeValue"
+              AnchorPane.topAnchor="90.0"
+              AnchorPane.leftAnchor="65"
+              AnchorPane.rightAnchor="0"
+            />
+            <Label alignment="CENTER" contentDisplay="CENTER" text="Farba:"
+              AnchorPane.topAnchor="125.0"
+              AnchorPane.leftAnchor="0"
+            />
+            <ComboBox fx:id="cbEdgeColor" AnchorPane.topAnchor="120.0"
+              AnchorPane.leftAnchor="65"
+              AnchorPane.rightAnchor="0"/>
+            <Button fx:id="btnChangeEdgeValues" text="Set values"
+              onAction="#updateEdgeValues" AnchorPane.topAnchor="150.0"
+              AnchorPane.rightAnchor="0"
+              AnchorPane.leftAnchor="0"
+            />
           </AnchorPane>
         </AnchorPane>
         <AnchorPane fx:id="apLeft" prefHeight="500.0" prefWidth="200.0"
@@ -151,7 +162,7 @@
           />
         </AnchorPane>
       </AnchorPane>
-      <AnchorPane prefHeight="50.0"
+      <AnchorPane prefHeight="65.0"
         AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0"
         AnchorPane.bottomAnchor="10.0"
       >
@@ -186,7 +197,7 @@
         <TextArea fx:id="taConsole" editable="false" prefHeight="80.0" prefWidth="200.0"
           AnchorPane.bottomAnchor="55.0" AnchorPane.leftAnchor="0.0"
           AnchorPane.rightAnchor="0.0"
-          
+
         />
       </AnchorPane>
     </AnchorPane>

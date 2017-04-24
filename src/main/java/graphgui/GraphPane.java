@@ -121,7 +121,7 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
     });
     circle.setCursor(Cursor.HAND);
     circle.setOnMouseMoved((MouseEvent event) -> {
-      if(State.getState().isAddingEdge()) moveLine(event, null);
+      if (State.getState().isAddingEdge()) moveLine(event, null);
     });
     this.getChildren().add(circle);
     Text text = GraphicsHelpers.createBoundedText(
