@@ -13,9 +13,12 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import graphgui.GraphPane?>
 
+
+
 <BorderPane fx:id="root" stylesheets="@../styles/global.css" xmlns="http://javafx.com/javafx/8"
   xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphics.Controller"
 >
+    <!-- TODO dva buttony 'Run GraphAlgorithm' #btnGraphAlgorithm 'Run Dialog' #runDialog -->
   <top>
     <MenuBar fx:id="menuBar" BorderPane.alignment="CENTER">
       <Menu fx:id="menuFile" mnemonicParsing="false" text="File">
@@ -26,11 +29,10 @@
         <MenuItem fx:id="menuItemCloseProgram" mnemonicParsing="false" text="Close"
           onAction="#closeProgramHandler"/>
       </Menu>
-      <Menu fx:id="menuEdit" mnemonicParsing="false" text="Edit">
-        <MenuItem mnemonicParsing="false" text="asdf"/>
-      </Menu>
+      
       <Menu fx:id="menuHelp" mnemonicParsing="false" text="Help">
-        <MenuItem mnemonicParsing="false" text="About"/>
+          <!-- TODO skratka Ctrl-H -->
+        <MenuItem fx:id="menuItemHelp" mnemonicParsing="false" text="Supported Commands" onAction="#displayHelpAlert"/>
       </Menu>
     </MenuBar>
   </top>
@@ -186,7 +188,7 @@
             onKeyPressed="#commandLineTyped"
           >
             <cursor>
-              <Cursor fx:constant="CLOSED_HAND"/>
+             <Cursor fx:constant="CLOSED_HAND"/>
             </cursor>
           </TextField>
           <Label text="Command line:"
