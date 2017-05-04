@@ -8,16 +8,12 @@ import java.io.File;
 import java.util.HashMap;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
-import javafx.geometry.NodeOrientation;
 import javafx.scene.Cursor;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
@@ -507,7 +503,6 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
 
             } catch (NumberFormatException e) {
               return  "Indexy pre edit edge maju nespravny format - ocakavaju sa dve cele cisla";
-
             } catch (IllegalArgumentException e) {
               return  e.toString();
             } catch (IndexOutOfBoundsException e) {

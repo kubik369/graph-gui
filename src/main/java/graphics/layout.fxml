@@ -13,8 +13,6 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import graphgui.GraphPane?>
 
-
-
 <BorderPane fx:id="root" stylesheets="@../styles/global.css" xmlns="http://javafx.com/javafx/8"
   xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphics.Controller"
 >

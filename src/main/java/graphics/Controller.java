@@ -8,14 +8,20 @@ import graphgui.Vertex;
 import graphgui.enums.GraphMode;
 import graphgui.utils.GraphLoader;
 import java.io.File;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.AccessibleRole;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -28,6 +34,10 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 
@@ -69,9 +79,9 @@ public class Controller {
   @FXML
   public TextArea taConsole;
 
-  public static final ArrayList<String> VERTEXCOLORS
+  public static final ArrayList<String> VERTEX_COLORS
       = new ArrayList<>(Arrays.asList("black", "white", "green", "orange", "blue", "yellow"));
-  public static final ArrayList<String> EDGECOLORS
+  public static final ArrayList<String> EDGE_COLORS
       = new ArrayList<>(Arrays.asList("black", "white", "green", "orange", "blue", "yellow"));
 
   @FXML
@@ -82,10 +92,10 @@ public class Controller {
     this.tfVertexValue.setDisable(true);
     this.tfEdgeValue.setDisable(true);
     this.cbVertexColor.setDisable(true);
-    this.cbVertexColor.getItems().addAll(VERTEXCOLORS);
+    this.cbVertexColor.getItems().addAll(VERTEX_COLORS);
 
     this.cbEdgeColor.setDisable(true);
-    this.cbEdgeColor.getItems().addAll(EDGECOLORS);
+    this.cbEdgeColor.getItems().addAll(EDGE_COLORS);
     this.menuItemSave.setAccelerator(new KeyCodeCombination(
         KeyCode.S,
         KeyCombination.CONTROL_DOWN
@@ -161,57 +171,88 @@ public class Controller {
     }
   }
 
+  private Text stringToBoldText(String s) {
+    Text t = new Text(s);
+    t.setStyle("-fx-font-weight: bold;");
+    return t;
+  }
+
   /**
    * Displays an alert listing all supported command line commands.
    */
   @SuppressWarnings("checkstyle:LineLength")
   public void displayHelpAlert() {
+    /* Takto by sa to robilo pre bold, unhighlightable
+    (odkomentovat toto, zakomentovat zvysok, then you can look at it)
     Alert alert = new Alert(Alert.AlertType.INFORMATION);
     alert.setTitle("Supported Commands");
     alert.setHeaderText(null);
     alert.setResizable(true);
     alert.getDialogPane().setMinWidth(750);
+    DialogPane dialogPane = alert.getDialogPane();
 
-    alert.setContentText(
-            "Save (String) filename :\n"
-            + "Saves current graph to the file named filename, or filename.graph if filename does not have said extension.\n"
-            + "Load (String) filename :\n"
-            + "Loads graph from file named filename, or filename.graph if filename does not have said extension.\n"
-            + "Add Vertex (optional (double) x (double) y) :\n"
-            + "Adds a new vertex to the graph. If no coordinates are given, vertices are added in a grid-like fashion spaced out on the panel.\n"
-            + "Otherwise it adds a new vertex to the graph with the given coordinates.\n"
-            + "Add Edge (int) from (int) to :\n"
-            + "Adds an edge from the vertex with id from to vertex with id to.\n"
-            + "Select Vertex (int) vertexId :\n"
-            + "Selects the vertex with id vertexId.\n"
-            + "Select Edge (int) from (int) to:\n"
-            + "Selects edge with originId from and destinationId to.\n"
-            + "Edit Vertex (int) vertexId (int) value :\n"
-            + "Sets the value of vertex with id vertexId to value.\n"
-            + "Edit Vertex (int) vertexId (String) color :\n"
-            + "Sets the color of vertex with id vertexId to color.\n"
-            + "Edit Edge (int) from (int) to (int) value :\n"
-            + "Sets the value of edge with oridingId from and destinationId to to value.\n"
-            + "Edit Edge (int) from (int) to (String) color :\n"
-            + "Sets the color of edge with oridingId from and destinationId to to color.\n"
-            + "Remove Vertex (int) vertexId :\n"
-            + "Removes the vertex with id vertexId.\n"
-            + "Remove Edge (int) from (int) to :\n"
-            + "Removes edge with originId from and destinationId to.\n"
-            + "Move (int) vertexId (double) x (double) y) :\n"
-            + "Moves vertex with id vertexId vertexId to new coordinates (x, y).\n"
-            + "Deselect Edge :\n"
-            + "Deselects currently selected edge\n"
-            + "Deselect Vertex : Deselects currently selected vertex\n"
-            + "Run :\n"
-            + "Runs controller.runGraphAlgorithm().\n"
-            + "Dialog :\n"
-            + "Runs controller.runDialog().\n"
-            + "Exit :\n"
-            + "Exits the application.\n"
-            + "Help :\n"
-            + "Displays this alert."
-    );
+    TextFlow flow = new TextFlow();
+
+    flow.getChildren().add(stringToBoldText("Save (String) filename :\n"));
+    flow.getChildren().add(new Text("Saves current graph to the file named filename, or filename.graph if filename does not have said extension.\n"));
+    flow.getChildren().add(stringToBoldText("Load (String) filename :\n"));
+    flow.getChildren().add(new Text("Loads graph from file named filename, or filename.graph if filename does not have said extension.\n"));
+    dialogPane.setContent(flow);
+    alert.showAndWait();
+    */
+
+    Alert alert = new Alert(AlertType.INFORMATION);
+    alert.setTitle("Supported Commands");
+    alert.setHeaderText(null);
+    alert.setContentText(null);
+
+    TextArea textArea = new TextArea();
+    textArea.setEditable(false);
+    textArea.setWrapText(true);
+    textArea.setMaxWidth(Double.MAX_VALUE);
+    textArea.setMaxHeight(Double.MAX_VALUE);
+    alert.getDialogPane().setContent(textArea);
+    alert.getDialogPane().setMinHeight(750);
+    alert.getDialogPane().setMinWidth(750);
+
+    textArea.appendText("Save (String) filename :\n");
+    textArea.appendText("Saves current graph to the file named filename, or filename.graph if filename does not have said extension.\n");
+    textArea.appendText("Load (String) filename :\n");
+    textArea.appendText("Loads graph from file named filename, or filename.graph if filename does not have said extension.\n");
+    textArea.appendText("Add Vertex (optional (double) x (double) y) :\n");
+    textArea.appendText("Adds a new vertex to the graph. If no coordinates are given, vertices are added in a grid-like fashion spaced out on the panel.\n");
+    textArea.appendText("Otherwise it adds a new vertex to the graph with the given coordinates.\n");
+    textArea.appendText("Add Edge (int) from (int) to :\n");
+    textArea.appendText("Adds an edge from the vertex with id from to vertex with id to.\n");
+    textArea.appendText("Select Vertex (int) vertexId :\n");
+    textArea.appendText("Selects the vertex with id vertexId.\n");
+    textArea.appendText("Select Edge (int) from (int) to:\n");
+    textArea.appendText("Selects edge with originId from and destinationId to.\n");
+    textArea.appendText("Edit Vertex (int) vertexId (int) value :\n");
+    textArea.appendText("Sets the value of vertex with id vertexId to value.\n");
+    textArea.appendText("Edit Vertex (int) vertexId (String) color :\n");
+    textArea.appendText("Sets the color of vertex with id vertexId to color.\n");
+    textArea.appendText("Edit Edge (int) from (int) to (int) value :\n");
+    textArea.appendText("Sets the value of edge with oridingId from and destinationId to to value.\n");
+    textArea.appendText("Edit Edge (int) from (int) to (String) color :\n");
+    textArea.appendText("Sets the color of edge with oridingId from and destinationId to to color.\n");
+    textArea.appendText("Remove Vertex (int) vertexId :\n");
+    textArea.appendText("Removes the vertex with id vertexId.\n");
+    textArea.appendText("Remove Edge (int) from (int) to :\n");
+    textArea.appendText("Removes edge with originId from and destinationId to.\n");
+    textArea.appendText("Move (int) vertexId (double) x (double) y) :\n");
+    textArea.appendText("Moves vertex with id vertexId vertexId to new coordinates (x, y).\n");
+    textArea.appendText("Deselect Edge :\n");
+    textArea.appendText("Deselects currently selected edge\n");
+    textArea.appendText("Deselect Vertex : Deselects currently selected vertex\n");
+    textArea.appendText("Run :\n");
+    textArea.appendText("Runs controller.runGraphAlgorithm().\n");
+    textArea.appendText("Dialog :\n");
+    textArea.appendText("Runs controller.runDialog().\n");
+    textArea.appendText("Exit :\n");
+    textArea.appendText("Exits the application.\n");
+    textArea.appendText("Help :\n");
+    textArea.appendText("Displays this alert.");
     alert.showAndWait();
   }
 
@@ -381,11 +422,11 @@ public class Controller {
   }
 
   public boolean validVertexColor(String color) {
-    return this.VERTEXCOLORS.contains(color);
+    return this.VERTEX_COLORS.contains(color);
   }
 
   public boolean validEdgeColor(String color) {
-    return this.EDGECOLORS.contains(color);
+    return this.EDGE_COLORS.contains(color);
   }
 
   public void appendTextArea(String text) {
