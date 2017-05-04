@@ -76,6 +76,7 @@ public class Controller {
   public MenuItem menuItemCloseProgram;
   public MenuItem menuItemLoad;
   public MenuItem menuItemSave;
+  public MenuItem menuItemHelp;
   @FXML
   public TextArea taConsole;
 
@@ -106,6 +107,10 @@ public class Controller {
     ));
     this.menuItemCloseProgram.setAccelerator(new KeyCodeCombination(
         KeyCode.Q,
+        KeyCombination.CONTROL_DOWN
+    ));
+    this.menuItemHelp.setAccelerator(new KeyCodeCombination(
+        KeyCode.H,
         KeyCombination.CONTROL_DOWN
     ));
     Platform.runLater(() -> {
@@ -411,7 +416,7 @@ public class Controller {
   /**
   * Spusti GraphAlgorithm() a jeho vysledok zobrazi alertom.
   */
-  public void btnGraphAlgorithm() {
+  public void btnGraphAlgorithmAction() {
     String result = runGraphAlgorithm();
     Alert alert = new Alert(Alert.AlertType.INFORMATION);
     alert.setTitle("Graph Algorithm");

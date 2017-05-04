@@ -16,7 +16,6 @@
 <BorderPane fx:id="root" stylesheets="@../styles/global.css" xmlns="http://javafx.com/javafx/8"
   xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphics.Controller"
 >
-    <!-- TODO dva buttony 'Run GraphAlgorithm' #btnGraphAlgorithm 'Run Dialog' #runDialog -->
   <top>
     <MenuBar fx:id="menuBar" BorderPane.alignment="CENTER">
       <Menu fx:id="menuFile" mnemonicParsing="false" text="File">
@@ -27,9 +26,8 @@
         <MenuItem fx:id="menuItemCloseProgram" mnemonicParsing="false" text="Close"
           onAction="#closeProgramHandler"/>
       </Menu>
-      
+
       <Menu fx:id="menuHelp" mnemonicParsing="false" text="Help">
-          <!-- TODO skratka Ctrl-H -->
         <MenuItem fx:id="menuItemHelp" mnemonicParsing="false" text="Supported Commands" onAction="#displayHelpAlert"/>
       </Menu>
     </MenuBar>
@@ -159,6 +157,16 @@
             AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="0.0"
             AnchorPane.topAnchor="90.0"
             onAction="#changeMode"
+          />
+          <Button fx:id="btnGraphAlgorithm" text="Run Algorithm" mnemonicParsing="false"
+            AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="0.0"
+            AnchorPane.topAnchor="120.0"
+            onAction="#btnGraphAlgorithmAction"
+          />
+          <Button fx:id="btnRunDialog" text="Run Dialog" mnemonicParsing="false"
+            AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="0.0"
+            AnchorPane.topAnchor="150.0"
+            onAction="#runDialog"
           />
         </AnchorPane>
       </AnchorPane>
