@@ -8,20 +8,15 @@ import graphgui.Vertex;
 import graphgui.enums.GraphMode;
 import graphgui.utils.GraphLoader;
 import java.io.File;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import javafx.application.Platform;
-import javafx.embed.swing.JFXPanel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.AccessibleRole;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -34,10 +29,7 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 
@@ -183,29 +175,10 @@ public class Controller {
   }
 
   /**
-   * Displays an alert listing all supported command line commands.
+   * Zobrazí alert s popisom všetkých možných príkazov.
    */
   @SuppressWarnings("checkstyle:LineLength")
   public void displayHelpAlert() {
-    /* Takto by sa to robilo pre bold, unhighlightable
-    (odkomentovat toto, zakomentovat zvysok, then you can look at it)
-    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-    alert.setTitle("Supported Commands");
-    alert.setHeaderText(null);
-    alert.setResizable(true);
-    alert.getDialogPane().setMinWidth(750);
-    DialogPane dialogPane = alert.getDialogPane();
-
-    TextFlow flow = new TextFlow();
-
-    flow.getChildren().add(stringToBoldText("Save (String) filename :\n"));
-    flow.getChildren().add(new Text("Saves current graph to the file named filename, or filename.graph if filename does not have said extension.\n"));
-    flow.getChildren().add(stringToBoldText("Load (String) filename :\n"));
-    flow.getChildren().add(new Text("Loads graph from file named filename, or filename.graph if filename does not have said extension.\n"));
-    dialogPane.setContent(flow);
-    alert.showAndWait();
-    */
-
     Alert alert = new Alert(AlertType.INFORMATION);
     alert.setTitle("Supported Commands");
     alert.setHeaderText(null);
@@ -262,7 +235,7 @@ public class Controller {
   }
 
   /**
-   * Otvori dialog na nacitanie grafu.
+   * Otvorí dialóg na načítanie grafu.
    * @param actionEvent event
    */
   public void loadGraphHandler(ActionEvent actionEvent) {
@@ -382,7 +355,7 @@ public class Controller {
         }
       }
       String result = this.gpGraph.executeCommand(tokens.toArray(new String[ tokens.size() ]));
-      if (result != "ignore me") {
+      if (!result.equals("ignore me")) {
         this.appendTextArea(result + "\n");
       }
     }
@@ -427,11 +400,11 @@ public class Controller {
   }
 
   public boolean validVertexColor(String color) {
-    return this.VERTEX_COLORS.contains(color);
+    return Controller.VERTEX_COLORS.contains(color);
   }
 
   public boolean validEdgeColor(String color) {
-    return this.EDGE_COLORS.contains(color);
+    return Controller.EDGE_COLORS.contains(color);
   }
 
   public void appendTextArea(String text) {
