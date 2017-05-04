@@ -43,10 +43,7 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
       Vertex v = State.getState().getSelectedVertex();
       if (State.getState().getMode() == GraphMode.EDIT_GRAPH && v != null) {
         State.getState().setAddingEdge(true);
-        this.edgeLine.setStartX(v.getX() + v.getSize() / 2);
-        this.edgeLine.setStartY(v.getY() + v.getSize() / 2);
-        this.edgeLine.setEndX(e.getX());
-        this.edgeLine.setEndY(e.getY());
+        moveLine(e, v);
       }
     });
     this.getChildren().add(this.edgeLine);
@@ -55,6 +52,7 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
     this.setBackground(new Background(new BackgroundFill(
         Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY
     )));
+    this.toBack();
   }
 
   /**
@@ -77,6 +75,20 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
         this.graph.deselectVertex();
       }
     });
+  }
+
+  /**
+   * Prekresli ciaru aby viedla od suradnic vrchola po poziciu mysky.
+   * @param e event obsahujuci pozicie mysky
+   * @param v ak je null, tak zmenime iba koncove body, inak aj zaciatocne
+   */
+  public void moveLine(MouseEvent e, Vertex v) {
+    if (v != null) {
+      this.edgeLine.setStartX(v.getX() + v.getSize() / 2);
+      this.edgeLine.setStartY(v.getY() + v.getSize() / 2);
+    }
+    this.edgeLine.setEndX(e.getX());
+    this.edgeLine.setEndY(e.getY());
   }
 
   /**
@@ -109,9 +121,9 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
     });
     circle.setCursor(Cursor.HAND);
     circle.setOnMouseMoved((MouseEvent event) -> {
-      // FIXME Find out what needs to be done here
-      //gui.setInfoLabelText("Vertex " + vertex.toString());
-      event.consume();
+      if (State.getState().isAddingEdge()) {
+        moveLine(event, null);
+      }
     });
     this.getChildren().add(circle);
     Text text = GraphicsHelpers.createBoundedText(
