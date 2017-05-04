@@ -8,10 +8,13 @@ import graphgui.Vertex;
 import graphgui.enums.GraphMode;
 import graphgui.utils.GraphLoader;
 import java.io.File;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.Arrays;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -26,6 +29,7 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 
@@ -64,8 +68,14 @@ public class Controller {
   public MenuItem menuItemCloseProgram;
   public MenuItem menuItemLoad;
   public MenuItem menuItemSave;
+  public MenuItem menuItemHelp;
   @FXML
   public TextArea taConsole;
+
+  public static final ArrayList<String> VERTEX_COLORS
+      = new ArrayList<>(Arrays.asList("black", "white", "green", "orange", "blue", "yellow"));
+  public static final ArrayList<String> EDGE_COLORS
+      = new ArrayList<>(Arrays.asList("black", "white", "green", "orange", "blue", "yellow"));
 
   @FXML
   private void initialize() {
@@ -75,14 +85,10 @@ public class Controller {
     this.tfVertexValue.setDisable(true);
     this.tfEdgeValue.setDisable(true);
     this.cbVertexColor.setDisable(true);
-    this.cbVertexColor.getItems().addAll(
-        "black", "white", "green", "orange", "blue", "yellow"
-    );
+    this.cbVertexColor.getItems().addAll(VERTEX_COLORS);
 
     this.cbEdgeColor.setDisable(true);
-    this.cbEdgeColor.getItems().addAll(
-        "black", "white", "green", "orange", "blue", "yellow"
-    );
+    this.cbEdgeColor.getItems().addAll(EDGE_COLORS);
     this.menuItemSave.setAccelerator(new KeyCodeCombination(
         KeyCode.S,
         KeyCombination.CONTROL_DOWN
@@ -93,6 +99,10 @@ public class Controller {
     ));
     this.menuItemCloseProgram.setAccelerator(new KeyCodeCombination(
         KeyCode.Q,
+        KeyCombination.CONTROL_DOWN
+    ));
+    this.menuItemHelp.setAccelerator(new KeyCodeCombination(
+        KeyCode.H,
         KeyCombination.CONTROL_DOWN
     ));
     Platform.runLater(() -> {
@@ -158,8 +168,74 @@ public class Controller {
     }
   }
 
+  private Text stringToBoldText(String s) {
+    Text t = new Text(s);
+    t.setStyle("-fx-font-weight: bold;");
+    return t;
+  }
+
   /**
-   * Otvori dialog na nacitanie grafu.
+   * Zobrazí alert s popisom všetkých možných príkazov.
+   */
+  @SuppressWarnings("checkstyle:LineLength")
+  public void displayHelpAlert() {
+    Alert alert = new Alert(AlertType.INFORMATION);
+    alert.setTitle("Supported Commands");
+    alert.setHeaderText(null);
+    alert.setContentText(null);
+
+    TextArea textArea = new TextArea();
+    textArea.setEditable(false);
+    textArea.setWrapText(true);
+    textArea.setMaxWidth(Double.MAX_VALUE);
+    textArea.setMaxHeight(Double.MAX_VALUE);
+    alert.getDialogPane().setContent(textArea);
+    alert.getDialogPane().setMinHeight(750);
+    alert.getDialogPane().setMinWidth(750);
+
+    textArea.appendText("Save (String) filename :\n");
+    textArea.appendText("Saves current graph to the file named filename, or filename.graph if filename does not have said extension.\n");
+    textArea.appendText("Load (String) filename :\n");
+    textArea.appendText("Loads graph from file named filename, or filename.graph if filename does not have said extension.\n");
+    textArea.appendText("Add Vertex (optional (double) x (double) y) :\n");
+    textArea.appendText("Adds a new vertex to the graph. If no coordinates are given, vertices are added in a grid-like fashion spaced out on the panel.\n");
+    textArea.appendText("Otherwise it adds a new vertex to the graph with the given coordinates.\n");
+    textArea.appendText("Add Edge (int) from (int) to :\n");
+    textArea.appendText("Adds an edge from the vertex with id from to vertex with id to.\n");
+    textArea.appendText("Select Vertex (int) vertexId :\n");
+    textArea.appendText("Selects the vertex with id vertexId.\n");
+    textArea.appendText("Select Edge (int) from (int) to:\n");
+    textArea.appendText("Selects edge with originId from and destinationId to.\n");
+    textArea.appendText("Edit Vertex (int) vertexId (int) value :\n");
+    textArea.appendText("Sets the value of vertex with id vertexId to value.\n");
+    textArea.appendText("Edit Vertex (int) vertexId (String) color :\n");
+    textArea.appendText("Sets the color of vertex with id vertexId to color.\n");
+    textArea.appendText("Edit Edge (int) from (int) to (int) value :\n");
+    textArea.appendText("Sets the value of edge with oridingId from and destinationId to to value.\n");
+    textArea.appendText("Edit Edge (int) from (int) to (String) color :\n");
+    textArea.appendText("Sets the color of edge with oridingId from and destinationId to to color.\n");
+    textArea.appendText("Remove Vertex (int) vertexId :\n");
+    textArea.appendText("Removes the vertex with id vertexId.\n");
+    textArea.appendText("Remove Edge (int) from (int) to :\n");
+    textArea.appendText("Removes edge with originId from and destinationId to.\n");
+    textArea.appendText("Move (int) vertexId (double) x (double) y) :\n");
+    textArea.appendText("Moves vertex with id vertexId vertexId to new coordinates (x, y).\n");
+    textArea.appendText("Deselect Edge :\n");
+    textArea.appendText("Deselects currently selected edge\n");
+    textArea.appendText("Deselect Vertex : Deselects currently selected vertex\n");
+    textArea.appendText("Run :\n");
+    textArea.appendText("Runs controller.runGraphAlgorithm().\n");
+    textArea.appendText("Dialog :\n");
+    textArea.appendText("Runs controller.runDialog().\n");
+    textArea.appendText("Exit :\n");
+    textArea.appendText("Exits the application.\n");
+    textArea.appendText("Help :\n");
+    textArea.appendText("Displays this alert.");
+    alert.showAndWait();
+  }
+
+  /**
+   * Otvorí dialóg na načítanie grafu.
    * @param actionEvent event
    */
   public void loadGraphHandler(ActionEvent actionEvent) {
@@ -271,14 +347,17 @@ public class Controller {
       String command = tfCommandLine.getText();
       this.tfCommandLine.clear();
       String[] tempTokens = command.split("\\s");
-      Vector<String> tokens = new Vector<String>();
+      ArrayList<String> tokens = new ArrayList<>();
       for (String token : tempTokens) {
         token.trim();
         if (token.length() != 0) {
           tokens.add(token);
         }
       }
-      this.gpGraph.executeCommand(tokens.toArray(new String[ tokens.size() ]));
+      String result = this.gpGraph.executeCommand(tokens.toArray(new String[ tokens.size() ]));
+      if (!result.equals("ignore me")) {
+        this.appendTextArea(result + "\n");
+      }
     }
   }
 
@@ -301,6 +380,31 @@ public class Controller {
     }
 
     return "Result bol null";
+  }
+
+  public void runDialog() {
+    //TODO: spustit druhy skuskovy algoritmus!
+  }
+
+  /**
+  * Spusti GraphAlgorithm() a jeho vysledok zobrazi alertom.
+  */
+  public void btnGraphAlgorithmAction() {
+    String result = runGraphAlgorithm();
+    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+    alert.setTitle("Graph Algorithm");
+    alert.setHeaderText(null);
+    alert.setResizable(false);
+    alert.setContentText(result);
+    alert.showAndWait();
+  }
+
+  public boolean validVertexColor(String color) {
+    return Controller.VERTEX_COLORS.contains(color);
+  }
+
+  public boolean validEdgeColor(String color) {
+    return Controller.EDGE_COLORS.contains(color);
   }
 
   public void appendTextArea(String text) {

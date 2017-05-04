@@ -26,11 +26,9 @@
         <MenuItem fx:id="menuItemCloseProgram" mnemonicParsing="false" text="Close"
           onAction="#closeProgramHandler"/>
       </Menu>
-      <Menu fx:id="menuEdit" mnemonicParsing="false" text="Edit">
-        <MenuItem mnemonicParsing="false" text="asdf"/>
-      </Menu>
+
       <Menu fx:id="menuHelp" mnemonicParsing="false" text="Help">
-        <MenuItem mnemonicParsing="false" text="About"/>
+        <MenuItem fx:id="menuItemHelp" mnemonicParsing="false" text="Supported Commands" onAction="#displayHelpAlert"/>
       </Menu>
     </MenuBar>
   </top>
@@ -160,6 +158,16 @@
             AnchorPane.topAnchor="90.0"
             onAction="#changeMode"
           />
+          <Button fx:id="btnGraphAlgorithm" text="Run Algorithm" mnemonicParsing="false"
+            AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="0.0"
+            AnchorPane.topAnchor="120.0"
+            onAction="#btnGraphAlgorithmAction"
+          />
+          <Button fx:id="btnRunDialog" text="Run Dialog" mnemonicParsing="false"
+            AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="0.0"
+            AnchorPane.topAnchor="150.0"
+            onAction="#runDialog"
+          />
         </AnchorPane>
       </AnchorPane>
       <AnchorPane prefHeight="65.0"
@@ -186,7 +194,7 @@
             onKeyPressed="#commandLineTyped"
           >
             <cursor>
-              <Cursor fx:constant="CLOSED_HAND"/>
+             <Cursor fx:constant="CLOSED_HAND"/>
             </cursor>
           </TextField>
           <Label text="Command line:"

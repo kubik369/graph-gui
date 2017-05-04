@@ -312,14 +312,15 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
   }
 
   /**
-   * Zoberie popis jedneho prikazu ako pole Stringov a vykoná daný príkaz,
-   * a jeho výsledok vypíše na controller.taTextArea.
+   * Zoberie popis jedného príkazu ako pole String, vykoná daný príkaz,
+   * a vráti jeho výsledok.
    * @param tokens jeden príkaz reprezentovaný poľom Stringov.
+   * @return výsledok pokusu vykonania príkazu tokens.
    */
-  public void executeCommand(String[] tokens) {
+  public String executeCommand(String[] tokens) {
     // Prázdny príkaz je pravdepodobne len omylom stlačený enter - ignorujeme takýto pokus.
     if (tokens.length == 0) {
-      return;
+      return "ignore me";
     }
 
     //Skonvertujeme príkazy na malé písmená kvôli zjednoteniu
@@ -330,8 +331,7 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
     switch (tokens[0]) {
       case "save": {
         if (tokens.length != 2) {
-          this.controller.appendTextArea("Nespravny pocet parametrov pre save\n");
-          break;
+          return "Nespravny pocet parametrov pre save";
         }
 
         String filename = new String(tokens[1]);
@@ -341,18 +341,14 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
 
         File file = new File(filename);
         if (GraphLoader.saveGraph(this.graph, file)) {
-          this.controller.appendTextArea(String.format("Graf ulozeny v subore %s\n", tokens[1]));
+          return String.format("Graf ulozeny v subore %s", tokens[1]);
         } else {
-          this.controller.appendTextArea(
-              String.format("Graf sa nepodarilo ulozit v subore %s\n", tokens[1])
-          );
+          return String.format("Graf sa nepodarilo ulozit v subore %s", tokens[1]);
         }
-        break;
       }
       case "load": {
         if (tokens.length != 2) {
-          this.controller.appendTextArea("Nespravny pocet parametrov pre load\n");
-          break;
+          return "Nespravny pocet parametrov pre load";
         }
 
         String filename = new String(tokens[1]);
@@ -362,25 +358,20 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
 
         File file = new File(filename);
         if (GraphLoader.loadGraph(file)) {
-          this.controller.appendTextArea(String.format("Graf nacitany zo suboru %s\n", tokens[1]));
+          return String.format("Graf nacitany zo suboru %s", tokens[1]);
         } else {
-          this.controller.appendTextArea(
-              String.format("Graf sa nepodarilo nacitat zo suboru %s\n", tokens[1])
-          );
+          return String.format("Graf sa nepodarilo nacitat zo suboru %s", tokens[1]);
         }
-        break;
       }
       case "add": {
         if (tokens.length < 2) {
-          this.controller.appendTextArea("Nespravny pocet parametrov pre add\n");
-          break;
+          return "Nespravny pocet parametrov pre add";
         }
 
         switch (tokens[1]) {
           case "edge": {
             if (tokens.length != 4) {
-              this.controller.appendTextArea("Nespravny pocet parametrov pre add edge\n");
-              break;
+              return "Nespravny pocet parametrov pre add edge";
             }
             int from;
             int to;
@@ -389,21 +380,14 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
               to = Integer.parseInt(tokens[3]);
               this.graph.addEdge(from, to);
             } catch (NumberFormatException e) {
-              this.controller.appendTextArea(
-                  "Parametre pre add edge maju nespravny format - ocakavaju sa dve cele cisla\n"
-              );
-              break;
+              return "Parametre pre add edge maju nespravny format - ocakavaju sa dve cele cisla";
             } catch (IllegalArgumentException e) {
-              this.controller.appendTextArea(String.format("%s\n", e.toString()));
-              break;
+              return e.toString();
             } catch (IndexOutOfBoundsException e) {
-              this.controller.appendTextArea("Neplatny index vrcholu From alebo To\n");
-              break;
+              return "Neplatny index vrcholu From alebo To";
             }
-            this.controller.appendTextArea(
-                String.format("Hrana from %d to %d uspesne pridana\n", from, to)
-            );
-            break;
+
+            return String.format("Hrana from %d to %d uspesne pridana", from, to);
           }
           case "vertex": {
             if (tokens.length == 2) {
@@ -412,20 +396,14 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
               double x = (double) coordinates.getKey();
               double y = (double) coordinates.getValue();
               this.graph.addVertex(x, y);
-              this.controller.appendTextArea(
-                  String.format(
-                      "Vrchol %d uspesne pridany na suradnice (%f,%f)\n",
-                      this.graph.getNumberOfVertices() - 1 , x, y
-                  )
-              );
-              break;
+              return String.format(
+                        "Vrchol %d uspesne pridany na suradnice (%f,%f)",
+                        this.graph.getNumberOfVertices() - 1 , x, y
+                    );
             }
 
             if (tokens.length != 4) {
-              this.controller.appendTextArea(
-                  "Add vertex pozaduje bud 0 alebo 2 argumenty typu double\n"
-              );
-              break;
+              return "Add vertex pozaduje bud 0 alebo 2 argumenty typu double";
             }
 
             double x;
@@ -434,106 +412,87 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
               x = Double.parseDouble(tokens[2]);
               y = Double.parseDouble(tokens[3]);
             } catch (NumberFormatException e) {
-              this.controller.appendTextArea(
-                  "Parametre add vertex neboli v spravnom formate double\n"
-              );
-              break;
+              return "Parametre add vertex neboli v spravnom formate double";
             }
 
             if (x > this.getWidth() - 20 || x < 0 || y > this.getHeight() || y < 0) {
-              this.controller.appendTextArea(
-                  "Add vertex suradnice boli mimo grafickeho panelu\n"
-              );
-              break;
+              return "Add vertex suradnice boli mimo grafickeho panelu";
             }
 
             this.graph.addVertex(x, y);
-            this.controller.appendTextArea(
-                String.format(
-                    "Vrchol %d uspesne pridany na suradnice (%f,%f)\n",
-                    this.graph.getNumberOfVertices() - 1 , x, y
-                )
-            );
-
-            break;
+            return  String.format(
+                      "Vrchol %d uspesne pridany na suradnice (%f,%f)",
+                      this.graph.getNumberOfVertices() - 1 , x, y
+                    );
           }
           default: {
-            this.controller.appendTextArea(
-                String.format(
-                    "Druhy parameter add moze byt 'vertex' alebo 'edge', nie '%s'\n",
-                    tokens[1]
-                )
-            );
-            break;
+            return  String.format(
+                     "Druhy parameter add moze byt 'vertex' alebo 'edge', nie '%s'",
+                      tokens[1]
+                    );
           }
         }
-
-        break;
       }
       case "edit": {
-        //TODO po mergi s edit vecami
-        break;
-      }
-      case "select": {
-        if (tokens.length < 2) {
-          this.controller.appendTextArea("Nespravny pocet parametrov pre select\n");
-          break;
+        // TODO: selected edge/vertex, when edited, change values in right menu
+        if (tokens.length < 4) {
+          return "edit musi mat aspon styri parametre";
         }
 
         switch (tokens[1]) {
           case "vertex": {
-            if (tokens.length != 3) {
-              this.controller.appendTextArea(
-                  "select vertex ocakava jediny parameter (int)vertexId"
-              );
-              break;
+            if (tokens.length != 4) {
+              return  "edit vertex pozaduje presne dva parametre";
             }
-            int vertexId = -1;
+
+            int index;
+            Vertex v;
             try {
-              vertexId = Integer.parseInt(tokens[2]);
-              Vertex chosenVertex = this.graph.getVertex(vertexId);
-              this.graph.selectVertex(chosenVertex);
-              this.controller.appendTextArea(
-                  String.format(
-                      "Vrchol %d (%f, %f) uspesne vybrany.\n",
-                      vertexId, chosenVertex.getX(), chosenVertex.getY()
-                  )
-              );
-              this.controller.appendTextArea(
-                  String.format(
-                      "Jeho hodnota je %d a jeho farba je %s\n",
-                      chosenVertex.getValue(), chosenVertex.getColorName()
-                  )
-              );
+              index = Integer.parseInt(tokens[2]);
+              v = this.graph.getVertex(index);
             } catch (NumberFormatException e) {
-              this.controller.appendTextArea(
-                  String.format("select vertex ocakaval (int)vertexId, nasiel %s\n", tokens[2])
-              );
-              break;
+              return  String.format("Index vrcholu '%s' v nespravnom formate", tokens[1]);
             } catch (IndexOutOfBoundsException e) {
-              this.controller.appendTextArea(
-                  String.format("Neplatne vertexId %d\n", vertexId)
-              );
-              break;
+              return  "Neplatny index vrcholu";
             }
-            break;
+
+            try {
+              int value = Integer.parseInt(tokens[3]);
+              v.setValue(value);
+              if (State.getState().getSelectedVertex() == v) {
+                this.graph.deselectVertex();
+                this.graph.selectVertex(v);
+              }
+              return  String.format("Hodnota vrcholu %d uspesne zmenena na %d", index, value);
+            } catch (NumberFormatException e) {
+              if (this.controller.validVertexColor(tokens[3])) {
+                v.setColorName(tokens[3]);
+                if (State.getState().getSelectedVertex() == v) {
+                  this.graph.deselectVertex();
+                  this.graph.selectVertex(v);
+                }
+                return String.format("Farba vrcholu %d uspesne zmenena na %s", index, tokens[3]);
+              } else {
+                return String.format(
+                            "Stvrty parameter edit vertex ma byt cele cislo"
+                            + " alebo platny nazov farby, nie %s",
+                            tokens[3]
+                        );
+              }
+            }
           }
           case "edge": {
-            if (tokens.length != 4) {
-              this.controller.appendTextArea(
-                  "select edge vyzaduje presne dva parametre: (int)from (int)to\n"
-              );
-              break;
+            if (tokens.length != 5) {
+              return "edit edge pozaduje presne 5 parametrov";
             }
 
-            int from = -1;
-            int to = -1;
-
+            int from;
+            int to;
+            Edge chosenEdge = null;
             try {
               from = Integer.parseInt(tokens[2]);
               to = Integer.parseInt(tokens[3]);
               Vertex originVertex = this.graph.getVertex(from);
-              Edge chosenEdge = null;
               for (Edge adjEdge : originVertex.adjEdges()) {
                 if (adjEdge.getDestinationId() == to) {
                   chosenEdge = adjEdge;
@@ -542,60 +501,139 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
 
               if (chosenEdge == null) {
                 throw new IllegalArgumentException(
-                    String.format("Hrana %d %d neexistuje\n", from, to)
+                  String.format("Hrana %d %d neexistuje", from, to)
+                );
+              }
+
+            } catch (NumberFormatException e) {
+              return  "Indexy pre edit edge maju nespravny format - ocakavaju sa dve cele cisla";
+            } catch (IllegalArgumentException e) {
+              return  e.toString();
+            } catch (IndexOutOfBoundsException e) {
+              return  "Neplatny index vrcholu From alebo To";
+            }
+
+            chosenEdge = chosenEdge.getPrimary();
+
+            try {
+              int value = Integer.parseInt(tokens[4]);
+              chosenEdge.setValue(value);
+              if (State.getState().getSelectedEdge().isEquivalent(chosenEdge)) {
+                Edge selectedEdge = State.getState().getSelectedEdge();
+                this.graph.deselectEdge();
+                this.graph.selectEdge(selectedEdge);
+              }
+              return  String.format("Hodnota hrany %d %d uspesne zmenena na %d", from, to, value);
+            } catch (NumberFormatException e) {
+              if (this.controller.validVertexColor(tokens[4])) {
+                chosenEdge.setColorName(tokens[4]);
+                if (State.getState().getSelectedEdge().isEquivalent(chosenEdge)) {
+                  Edge selectedEdge = State.getState().getSelectedEdge();
+                  this.graph.deselectEdge();
+                  this.graph.selectEdge(selectedEdge);
+                }
+                return  String.format(
+                            "Farba hrany %d %d uspesne zmenena na %s", from, to, tokens[4]
+                        );
+              } else {
+                return String.format(
+                          "Piaty parameter edit edge ma byt cele cislo alebo platny nazov farby,"
+                          + " nie %s",
+                          tokens[4]
+                        );
+              }
+            }
+          }
+          default: {
+            return "Druhy parameter edit moze byt 'vertex' alebo 'edge'";
+          }
+        }
+      }
+      case "select": {
+        if (tokens.length < 2) {
+          return "Nespravny pocet parametrov pre select";
+        }
+
+        switch (tokens[1]) {
+          case "vertex": {
+            if (tokens.length != 3) {
+              return
+                  "select vertex ocakava jediny parameter (int)vertexId";
+            }
+            int vertexId = -1;
+            try {
+              vertexId = Integer.parseInt(tokens[2]);
+              Vertex chosenVertex = this.graph.getVertex(vertexId);
+              this.graph.selectVertex(chosenVertex);
+              return  String.format(
+                          "Vrchol %d (%f, %f) uspesne vybrany.\n"
+                          + "Jeho hodnota je %d a jeho farba je %s",
+                          vertexId, chosenVertex.getX(), chosenVertex.getY(),
+                          chosenVertex.getValue(), chosenVertex.getColorName()
+                      );
+
+            } catch (NumberFormatException e) {
+              return   String.format("select vertex ocakaval (int)vertexId, nasiel %s", tokens[2]);
+            } catch (IndexOutOfBoundsException e) {
+              return  String.format("Neplatne vertexId %d", vertexId);
+            }
+          }
+          case "edge": {
+            if (tokens.length != 4) {
+              return  "select edge vyzaduje presne dva parametre: (int)from (int)to";
+            }
+
+            int from = -1;
+            int to = -1;
+            Edge chosenEdge = null;
+            try {
+              from = Integer.parseInt(tokens[2]);
+              to = Integer.parseInt(tokens[3]);
+              Vertex originVertex = this.graph.getVertex(from);
+              for (Edge adjEdge : originVertex.adjEdges()) {
+                if (adjEdge.getDestinationId() == to) {
+                  chosenEdge = adjEdge;
+                }
+              }
+
+              if (chosenEdge == null) {
+                throw new IllegalArgumentException(
+                    String.format("Hrana %d %d neexistuje", from, to)
                 );
               }
 
               this.graph.selectEdge(chosenEdge);
-              this.controller.appendTextArea(
-                  String.format("Hrana %d %d uspesne vybrana\n", from, to)
-              );
-              this.controller.appendTextArea(
-                  String.format(
-                      "Jej value je %d a jej farba je %s\n",
-                      chosenEdge.getValue(), chosenEdge.getColorName()
-                  )
-              );
+              return  String.format(
+                          "Hrana %d %d uspesne vybrana\nJej value je %d a jej farba je %s",
+                          from, to, chosenEdge.getValue(), chosenEdge.getColorName()
+                      );
+
 
             } catch (NumberFormatException e) {
-              this.controller.appendTextArea(
-                  "Parametre pre remove edge maju nespravny format - ocakavaju sa dve cele cisla\n"
-              );
-              break;
+              return "Parametre pre remove edge maju nespravny format, ocakavaju sa dve cele cisla";
             } catch (IllegalArgumentException e) {
-              this.controller.appendTextArea(String.format("%s\n", e.toString()));
-              break;
+              return e.toString();
             } catch (IndexOutOfBoundsException e) {
-              this.controller.appendTextArea("Neplatny index vrcholu From alebo To\n");
-              break;
+              return "Neplatny index vrcholu From alebo To";
             }
-
-            break;
           }
           default: {
-            this.controller.appendTextArea(
-                String.format(
-                    "Druhy parameter select ma byt bud 'vertex' alebo 'edge', nie %s\n",
-                    tokens[1]
-                )
-            );
-            break;
+            return  String.format(
+                        "Druhy parameter select ma byt bud 'vertex' alebo 'edge', nie %s",
+                        tokens[1]
+                     );
           }
         }
-
-        break;
       }
       case "remove": {
         if (tokens.length < 2) {
-          this.controller.appendTextArea("Nespravny pocet parametrov pre delete\n");
-          break;
+          return "Nespravny pocet parametrov pre delete";
         }
 
         switch (tokens[1]) {
           case "edge": {
             if (tokens.length < 4) {
-              this.controller.appendTextArea("Nespravny pocet parametrov pre remove edge\n");
-              break;
+              return "Nespravny pocet parametrov pre remove edge";
             }
 
             int from;
@@ -605,71 +643,48 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
               to = Integer.parseInt(tokens[3]);
               this.graph.removeEdge(from, to);
             } catch (NumberFormatException e) {
-              this.controller.appendTextArea(
-                  "Parametre pre remove edge maju nespravny format - ocakavaju sa dve cele cisla\n"
-              );
-              break;
+              return "Parametre pre remove edge maju nespravny format, ocakavaju sa dve cele cisla";
             } catch (IllegalArgumentException e) {
-              this.controller.appendTextArea(String.format("%s\n", e.toString()));
-              break;
+              return e.toString();
             } catch (IndexOutOfBoundsException e) {
-              this.controller.appendTextArea("Neplatny index vrcholu From alebo To\n");
-              break;
+              return "Neplatny index vrcholu From alebo To";
             }
 
-            this.controller.appendTextArea(
-                String.format("Hrana from %d to %d uspesne odstranena\n", from, to)
-            );
-            break;
+            return  String.format("Hrana from %d to %d uspesne odstranena", from, to);
           }
           case "vertex": {
             if (tokens.length != 3) {
-              this.controller.appendTextArea(
-                  String.format("delete vertex ocakava 1 parameter, nasiel %d\n", tokens.length - 2)
-              );
-              break;
+              return  String.format(
+                          "delete vertex ocakava 1 parameter, nasiel %d",
+                          tokens.length - 2
+                      );
             }
 
             int vertexId;
-
             try {
               vertexId = Integer.parseInt(tokens[2]);
             } catch (NumberFormatException e) {
-              this.controller.appendTextArea(
-                  String.format("delete vertex ocakava int vertexId, nasiel %s\n", tokens[2])
-              );
-              break;
+              return  String.format("delete vertex ocakava int vertexId, nasiel %s", tokens[2]);
             }
 
             try {
               this.graph.removeVertex(this.graph.getVertex(vertexId));
-              this.controller.appendTextArea(
-                  String.format("Vrchol %d uspesne zmazany\n", vertexId)
-              );
+              return  String.format("Vrchol %d uspesne zmazany", vertexId);
             } catch (IndexOutOfBoundsException e) {
-              this.controller.appendTextArea(String.format("vertexId %d je neplatne\n", vertexId));
+              return  String.format("vertexId %d je neplatne", vertexId);
             }
-            break;
           }
           default: {
-            this.controller.appendTextArea(
-                String.format(
-                    "Druhy parameter delete moze byt 'vertex' alebo 'edge', nie '%s'\n",
-                    tokens[1]
-                )
-            );
-            break;
+            return   String.format(
+                        "Druhy parameter delete moze byt 'vertex' alebo 'edge', nie '%s'",
+                        tokens[1]
+                      );
           }
         }
-
-        break;
       }
       case "move": {
         if (tokens.length != 4) {
-          this.controller.appendTextArea(
-              "move vyzaduje parametre (int)vertexId (double)newX (double)newY\n"
-          );
-          break;
+          return  "move vyzaduje parametre (int)vertexId (double)newX (double)newY";
         }
 
         int vertexId;
@@ -680,13 +695,11 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
           newX = Double.parseDouble(tokens[2]);
           newY = Double.parseDouble(tokens[3]);
         } catch (NumberFormatException e) {
-          this.controller.appendTextArea("move parametre niesu v spravnom formate\n");
-          break;
+          return  "move parametre niesu v spravnom formate";
         }
 
         if (newX < 0 || newY < 0 || newX > this.getWidth() - 20 || newY > this.getHeight() - 20) {
-          this.controller.appendTextArea("move suradnice mimo grafickeho panelu\n");
-          break;
+          return  "move suradnice mimo grafickeho panelu";
         }
 
         try {
@@ -699,66 +712,55 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
           this.vertexTexts.get(v).setX(this.vertexTexts.get(v).getX() + dx);
           this.vertexTexts.get(v).setY(this.vertexTexts.get(v).getY() + dy);
         } catch (IndexOutOfBoundsException e) {
-          this.controller.appendTextArea(String.format("Neplatny vertexId %d\n", vertexId));
-          break;
+          return  String.format("Neplatny vertexId %d", vertexId);
         }
-        this.controller.appendTextArea(
-            String.format(
-                "Vrchol %d uspesne presunuty na suradnice (%f, %f)\n",
+        return  String.format(
+                "Vrchol %d uspesne presunuty na suradnice (%f, %f)",
                 vertexId, newX, newY
-            )
-        );
-        break;
+                );
       }
       case "deselect": {
         if (tokens.length != 2) {
-          this.controller.appendTextArea("Nespravny pocet parametrov pre deselect\n");
-          break;
+          return  "Nespravny pocet parametrov pre deselect";
         }
 
         switch (tokens[1]) {
           case "edge": {
             State.getState().getExtendedGraph().deselectEdge();
-            this.controller.appendTextArea("Vyber hrany bol zruseny\n");
-            break;
+            return  "Vyber hrany bol zruseny";
           }
           case "vertex": {
             State.getState().getExtendedGraph().deselectVertex();
-            this.controller.appendTextArea("Vyber vrchola bol zruseny\n");
-            break;
+            return  "Vyber vrchola bol zruseny";
           }
           default: {
-            this.controller.appendTextArea(
-                String.format(
-                    "Druhy parameter pre delete moze byt bud 'edge' alebo 'vertex', nie %s\n",
-                    tokens[1]
-                )
-            );
-            break;
+            return  String.format(
+                        "Druhy parameter pre delete moze byt bud 'edge' alebo 'vertex', nie %s",
+                        tokens[1]
+                    );
           }
         }
-
-        break;
       }
       case "run": {
-        this.controller.appendTextArea(String.format("%s\n", this.controller.runGraphAlgorithm()));
-        break;
+        return  String.format("%s", this.controller.runGraphAlgorithm());
       }
-
+      case "dialog": {
+        this.controller.runDialog();
+        return "runDialog() executed";
+      }
       case "help": {
-        //TODO: po dokonceni vsetkych prikazov pridat manual
-        break;
+        this.controller.displayHelpAlert();
+        return "Help alert displayed";
       }
       case "exit": {
         this.controller.closeProgramHandler(new ActionEvent());
-        this.controller.appendTextArea("Exit failed\n");
-        break;
+        return  "Exit failed";
       }
       default: {
-        this.controller.appendTextArea(
-            String.format("Neznamy prikaz '%s'; skus prikaz 'help'\n", tokens[0])
-        );
+        return  String.format("Neznamy prikaz '%s'; skus prikaz 'help'", tokens[0]);
       }
     }
   }
+
+
 }
