@@ -312,7 +312,7 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
   }
 
   /**
-   * Zoberie popis jedneho prikazu ako pole Stringov a vykoná daný príkaz,
+   * Zoberie popis jedného príkazu ako pole String, vykoná daný príkaz,
    * a vráti jeho výsledok.
    * @param tokens jeden príkaz reprezentovaný poľom Stringov.
    * @return výsledok pokusu vykonania príkazu tokens.
@@ -459,14 +459,18 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
             try {
               int value = Integer.parseInt(tokens[3]);
               v.setValue(value);
-              this.graph.deselectVertex();
-              this.graph.selectVertex(v);
+              if (State.getState().getSelectedVertex() == v) {
+                this.graph.deselectVertex();
+                this.graph.selectVertex(v);
+              }
               return  String.format("Hodnota vrcholu %d uspesne zmenena na %d", index, value);
             } catch (NumberFormatException e) {
               if (this.controller.validVertexColor(tokens[3])) {
                 v.setColorName(tokens[3]);
-                this.graph.deselectVertex();
-                this.graph.selectVertex(v);
+                if (State.getState().getSelectedVertex() == v) {
+                  this.graph.deselectVertex();
+                  this.graph.selectVertex(v);
+                }
                 return String.format("Farba vrcholu %d uspesne zmenena na %s", index, tokens[3]);
               } else {
                 return String.format(
@@ -514,14 +518,20 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
             try {
               int value = Integer.parseInt(tokens[4]);
               chosenEdge.setValue(value);
-              this.graph.deselectEdge();
-              this.graph.selectEdge(chosenEdge);
+              if (State.getState().getSelectedEdge().isEquivalent(chosenEdge)) {
+                Edge selectedEdge = State.getState().getSelectedEdge();
+                this.graph.deselectEdge();
+                this.graph.selectEdge(selectedEdge);
+              }
               return  String.format("Hodnota hrany %d %d uspesne zmenena na %d", from, to, value);
             } catch (NumberFormatException e) {
               if (this.controller.validVertexColor(tokens[4])) {
                 chosenEdge.setColorName(tokens[4]);
-                this.graph.deselectEdge();
-                this.graph.selectEdge(chosenEdge);
+                if (State.getState().getSelectedEdge().isEquivalent(chosenEdge)) {
+                  Edge selectedEdge = State.getState().getSelectedEdge();
+                  this.graph.deselectEdge();
+                  this.graph.selectEdge(selectedEdge);
+                }
                 return  String.format(
                             "Farba hrany %d %d uspesne zmenena na %s", from, to, tokens[4]
                         );
