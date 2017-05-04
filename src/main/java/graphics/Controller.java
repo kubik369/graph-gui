@@ -184,7 +184,7 @@ public class Controller {
             + "Adds an edge from the vertex with id from to vertex with id to.\n"
             + "Select Vertex (int) vertexId :\n"
             + "Selects the vertex with id vertexId.\n"
-            + "Select Edge (int) from (int) to):\n"
+            + "Select Edge (int) from (int) to:\n"
             + "Selects edge with originId from and destinationId to.\n"
             + "Edit Vertex (int) vertexId (int) value :\n"
             + "Sets the value of vertex with id vertexId to value.\n"
