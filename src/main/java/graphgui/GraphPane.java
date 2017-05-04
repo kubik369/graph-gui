@@ -154,7 +154,7 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
       s.setOnMouseClicked((MouseEvent event) -> {
         event.consume();
         GraphMode mode = State.getState().getMode();
-        if (mode == GraphMode.EDIT_VALUES) {
+        if (mode == GraphMode.EDIT_VALUES || mode == GraphMode.VIEW) {
           this.graph.toggleEdgeSelection(edge);
         } else if (mode == GraphMode.DELETE) {
           this.graph.removeEdge(edge);
@@ -205,8 +205,12 @@ public class GraphPane extends Pane implements ExtendedGraph.GraphObserver {
   @Override
   public void edgeSelected(Edge edge) {
     System.out.println("Edge selected " + edge);
-    this.controller.setDisableEdgeValueFields(false);
-    this.controller.fillEdgeFields();
+    if (State.getState().getMode() == GraphMode.EDIT_VALUES) {
+      this.controller.setDisableEdgeValueFields(false);
+      this.controller.fillEdgeFields();
+    } else if (State.getState().getMode() == GraphMode.VIEW) {
+      this.controller.fillEdgeFields();
+    }
   }
 
   /**
